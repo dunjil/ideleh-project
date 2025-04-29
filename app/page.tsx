@@ -1,7 +1,7 @@
 import Link from "next/link"
 import Image from "next/image"
 import { Button } from "@/components/ui/button"
-import { MapPin, Mail, Phone, Lightbulb, Users, Building2, ChevronRight, ArrowRight } from "lucide-react"
+import { MapPin, Mail, Phone, Lightbulb, Users, Building2 } from "lucide-react"
 import { supabase } from "@/lib/supabase"
 import { getPublicStorageUrl } from "@/lib/storage-utils"
 import { HeroSlideshow } from "@/components/hero-slideshow"
@@ -168,11 +168,11 @@ async function getUpcomingEvents() {
       .select("*")
       .order("event_date", { ascending: true }) // Order by event date
       .gte("event_date", new Date().toISOString()) // Only get future events
-      .limit(3) // Limit to 3 upcoming events
+      .limit(3); // Limit to 3 upcoming events
 
     if (error) {
-      console.error("Error fetching events:", error)
-      return []
+      console.error("Error fetching events:", error);
+      return [];
     }
 
     return data.map((event) => ({
@@ -185,15 +185,15 @@ async function getUpcomingEvents() {
         month: "long",
         day: "numeric",
       }),
-    }))
+    }));
   } catch (error) {
-    console.error("Error in getUpcomingEvents:", error)
-    return []
+    console.error("Error in getUpcomingEvents:", error);
+    return [];
   }
 }
 
 export default async function Home() {
-  const events = await getUpcomingEvents()
+const events= await getUpcomingEvents()
   const heroImages = await getHeroImages()
   const siteContent = await getSiteContent()
   const featuredProjects = await getFeaturedProjects()
@@ -246,37 +246,36 @@ export default async function Home() {
   return (
     <>
       {/* Hero Section */}
+      <HeroSlideshow images={fallbackHeroImages} />
 
       {/* Vision & Mission Section */}
-      <section className="relative h-screen min-h-[600px] w-full overflow-hidden">
-        <HeroSlideshow images={fallbackHeroImages} />
-
-        {/* Overlay content */}
-        <div className="absolute inset-0 flex items-center justify-center bg-black/30">
-          <div className="container mx-auto px-4 text-center text-white">
-            <h1 className="text-4xl font-bold tracking-tight sm:text-5xl md:text-6xl lg:text-7xl">
-              Empowering <span className="text-primary">Future Leaders</span>
-            </h1>
-            <p className="mx-auto mt-6 max-w-2xl text-xl md:text-2xl">{fallbackHeroImages[0].description}</p>
-
-            <div className="mt-12 flex flex-col items-center justify-center gap-4 sm:flex-row">
-              <Button asChild size="lg" className="px-8 py-6 text-lg">
-                <Link href="/programs">
-                  Explore Programs <ChevronRight className="ml-2 h-5 w-5" />
-                </Link>
-              </Button>
-              <Button asChild variant="secondary" size="lg" className="px-8 py-6 text-lg">
-                <Link href="/about">
-                  Learn About Us <ArrowRight className="ml-2 h-5 w-5" />
-                </Link>
-              </Button>
+      <section className="py-16 md:py-24">
+        <div className="container mx-auto px-4">
+          <div className="grid gap-12 md:grid-cols-2 md:items-center">
+            <div>
+              <h2 className="text-3xl font-bold tracking-tight sm:text-4xl">
+                Our <span className="text-primary">Vision & Mission</span>
+              </h2>
+              <div className="mt-6 space-y-6">
+                <div>
+                  <h3 className="text-xl font-semibold">{siteContent.vision.title}</h3>
+                  <p className="mt-2 text-lg text-gray-600 dark:text-gray-400">{siteContent.vision.content}</p>
+                </div>
+                <div>
+                  <h3 className="text-xl font-semibold">{siteContent.mission.title}</h3>
+                  <p className="mt-2 text-lg text-gray-600 dark:text-gray-400">{siteContent.mission.content}</p>
+                </div>
+              </div>
+              <div className="mt-8">
+                <Button asChild>
+                  <Link href="/about">Read More About Us</Link>
+                </Button>
+              </div>
+            </div>
+            <div className="relative h-[400px] overflow-hidden rounded-lg shadow-xl">
+              <Image src={randomGalleryImage || "/placeholder.svg"} alt="About IDELEH" fill className="object-cover" />
             </div>
           </div>
-        </div>
-
-        {/* Scroll indicator */}
-        <div className="absolute bottom-8 left-1/2 -translate-x-1/2 animate-bounce">
-          <div className="h-8 w-5 rounded-full border-2 border-white"></div>
         </div>
       </section>
 
@@ -373,67 +372,69 @@ export default async function Home() {
         </div>
       </section>
 */}
-      <section className="py-16 md:py-24">
-        <div className="container mx-auto px-4">
-          <div className="mb-12 text-center">
-            <h2 className="text-3xl font-bold tracking-tight sm:text-4xl">
-              Upcoming <span className="text-primary">Events</span>
-            </h2>
-            <p className="mx-auto mt-4 max-w-2xl text-lg text-gray-600 dark:text-gray-400">
-              Join us at our upcoming events and programs designed to inspire, educate, and connect future leaders.
-            </p>
-          </div>
+<section className="py-16 md:py-24">
+  <div className="container mx-auto px-4">
+    <div className="mb-12 text-center">
+      <h2 className="text-3xl font-bold tracking-tight sm:text-4xl">
+        Upcoming <span className="text-primary">Events</span>
+      </h2>
+      <p className="mx-auto mt-4 max-w-2xl text-lg text-gray-600 dark:text-gray-400">
+        Join us at our upcoming events and programs designed to inspire, educate, and connect future leaders.
+      </p>
+    </div>
 
-          {events.length > 0 ? (
-            <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
-              {events.map((event) => (
-                <div
-                  key={event.id}
-                  className="rounded-lg bg-white shadow-lg transition-all hover:shadow-xl dark:bg-gray-800"
-                >
-                  <div className="relative h-48 w-full overflow-hidden rounded-t-lg">
-                    <Image
-                      src={
-                        event.imageUrl ||
-                        `/placeholder.svg?height=400&width=600&text=${encodeURIComponent(event.title) || "/placeholder.svg"}`
-                      }
-                      alt={event.title}
-                      fill
-                      className="object-cover"
-                    />
-                    <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-4">
-                      <div className="text-right">
-                        <span className="inline-block rounded-full bg-primary px-3 py-1 text-sm font-semibold text-white">
-                          {event.eventDate}
-                        </span>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="p-6">
-                    <h3 className="mb-2 text-xl font-bold">{event.title}</h3>
-                    <p className="mb-4 text-gray-600 dark:text-gray-400 line-clamp-3">{event.description}</p>
-                    <Button asChild variant="outline" size="sm">
-                      <Link href={`/events/${event.id}`}>View Details</Link>
-                    </Button>
-                  </div>
+    {events.length > 0 ? (
+      <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
+        {events.map((event) => (
+          <div
+            key={event.id}
+            className="rounded-lg bg-white shadow-lg transition-all hover:shadow-xl dark:bg-gray-800"
+          >
+            <div className="relative h-48 w-full overflow-hidden rounded-t-lg">
+              <Image
+                src={
+                  event.imageUrl ||
+                  `/placeholder.svg?height=400&width=600&text=${encodeURIComponent(event.title)}`
+                }
+                alt={event.title}
+                fill
+                className="object-cover"
+              />
+              <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-4">
+                <div className="text-right">
+                  <span className="inline-block rounded-full bg-primary px-3 py-1 text-sm font-semibold text-white">
+                    {event.eventDate}
+                  </span>
                 </div>
-              ))}
+              </div>
             </div>
-          ) : (
-            <div className="rounded-lg border border-dashed border-gray-300 bg-white p-8 text-center dark:border-gray-700 dark:bg-gray-800">
-              <p className="text-lg text-gray-600 dark:text-gray-400">
-                No upcoming events at the moment. Check back soon!
+            <div className="p-6">
+              <h3 className="mb-2 text-xl font-bold">{event.title}</h3>
+              <p className="mb-4 text-gray-600 dark:text-gray-400 line-clamp-3">
+                {event.description}
               </p>
+              <Button asChild variant="outline" size="sm">
+                <Link href={`/events/${event.id}`}>View Details</Link>
+              </Button>
             </div>
-          )}
-
-          <div className="mt-12 text-center">
-            <Button asChild>
-              <Link href="/events">View All Events</Link>
-            </Button>
           </div>
-        </div>
-      </section>
+        ))}
+      </div>
+    ) : (
+      <div className="rounded-lg border border-dashed border-gray-300 bg-white p-8 text-center dark:border-gray-700 dark:bg-gray-800">
+        <p className="text-lg text-gray-600 dark:text-gray-400">
+          No upcoming events at the moment. Check back soon!
+        </p>
+      </div>
+    )}
+
+    <div className="mt-12 text-center">
+      <Button asChild>
+        <Link href="/events">View All Events</Link>
+      </Button>
+    </div>
+  </div>
+</section>
       {/* Projects Section */}
       <section className="bg-gray-100 py-16 dark:bg-gray-900 md:py-24">
         <div className="container mx-auto px-4">

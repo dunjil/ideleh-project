@@ -44,15 +44,15 @@ export function Navbar() {
         isScrolled ? "bg-white shadow-md dark:bg-gray-900" : "bg-transparent",
       )}
     >
-      <div className="container mx-auto px-4 py-3">
+      <div className="container mx-auto px-4 py-1">
         <div className="flex items-center justify-between">
           <Link href="/" className="flex items-center space-x-2">
             <Image
               src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/icon%204-1scOO5uRlzgf2A0EBzgB8NYQmENW9t.png"
               alt="IDELEH Logo"
               width={150}
-              height={60}
-              className="h-12 w-auto"
+              height={80}
+              className="h-18 w-22"
             />
           </Link>
 
