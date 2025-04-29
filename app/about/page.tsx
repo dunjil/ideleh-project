@@ -1,6 +1,25 @@
 import Image from "next/image"
+import { supabase } from "@/lib/supabase"
+import { getPublicStorageUrl } from "@/lib/storage-utils"
 
-export default function AboutPage() {
+// Function to get a random gallery image
+async function getRandomGalleryImage() {
+  const { data, error } = await supabase.from("gallery").select("*").limit(10)
+
+  if (error || !data || data.length === 0) {
+    console.error("Error fetching random gallery image:", error)
+    return null
+  }
+
+  const randomIndex = Math.floor(Math.random() * data.length)
+  const randomImage = data[randomIndex]
+
+  return getPublicStorageUrl("gallery", randomImage.image_path)
+}
+
+export default async function AboutPage() {
+  const randomGalleryImage = await getRandomGalleryImage()
+
   return (
     <div className="container mx-auto px-4 py-16 md:py-24">
       <div className="mx-auto max-w-3xl text-center">
@@ -12,7 +31,12 @@ export default function AboutPage() {
 
       <div className="mt-16 grid gap-12 md:grid-cols-2 md:items-center">
         <div className="relative h-[400px] overflow-hidden rounded-lg shadow-xl">
-          <Image src="/placeholder.svg?height=800&width=600" alt="About IDELEH" fill className="object-cover" />
+          <Image
+            src={randomGalleryImage || "/placeholder.svg?height=800&width=600"}
+            alt="About IDELEH"
+            fill
+            className="object-cover"
+          />
         </div>
         <div className="space-y-6">
           <h2 className="text-3xl font-bold">Our Vision</h2>
