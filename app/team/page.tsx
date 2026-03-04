@@ -1,60 +1,21 @@
 import Image from "next/image"
-import { supabase } from "@/lib/supabase"
-import { getPublicStorageUrl } from "@/lib/storage-utils"
+import { query } from "@/lib/db"
+import { getImageSrc } from "@/lib/image-utils"
 
 async function getTeamMembers() {
   try {
-    console.log("Fetching all team members...")
-    const { data, error } = await supabase.from("team_members").select("*")
-
-    if (error) {
-      console.error("Error fetching team members:", error)
-      return []
-    }
-
-    console.log("Team members data:", data)
-
-    if (!data || data.length === 0) {
-      console.log("No team members found in database")
-      return []
-    }
-
-    return data.map((member) => ({
-      id: member.id,
-      name: member.name,
-      position: member.position,
-      bio: member.bio,
-      image_url: member.image_url || (member.image_path ? getPublicStorageUrl("team", member.image_path) : null),
-    }))
-  } catch (error) {
-    console.error("Error in getTeamMembers:", error)
+    const data = await query("SELECT * FROM team_members ORDER BY name ASC")
+    return data.map((m) => ({ id: m.id, name: m.name, position: m.position, bio: m.bio, imageUrl: getImageSrc(m.image_data) }))
+  } catch (e) {
+    console.error("Error in getTeamMembers:", e)
     return []
   }
 }
 
-// Default team members data
 const defaultTeamMembers = [
-  {
-    id: "1",
-    name: "Abel Ajayi",
-    position: "Co-Founder, IDELEH",
-    bio: "Abel is passionate about developing leadership skills in young people.",
-    image_url: "/placeholder.svg?height=400&width=300&text=Abel+Ajayi",
-  },
-  {
-    id: "2",
-    name: "Priscilla Asher John",
-    position: "Co-Founder, Executive Director",
-    bio: "Priscilla leads our flagship leadership programs with passion and dedication.",
-    image_url: "/placeholder.svg?height=400&width=300&text=Priscilla+Asher+John",
-  },
-  {
-    id: "3",
-    name: "Waltong David Tyoden",
-    position: "Co-Founder, IDELEH",
-    bio: "Waltong builds partnerships with local communities and organizations.",
-    image_url: "/placeholder.svg?height=400&width=300&text=Waltong+David+Tyoden",
-  },
+  { id: "1", name: "Abel Ajayi", position: "Co-Founder, IDELEH", bio: "Abel is passionate about developing leadership skills in young people.", imageUrl: "/placeholder.svg?height=400&width=300&text=Abel+Ajayi" },
+  { id: "2", name: "Priscilla Asher John", position: "Co-Founder, Executive Director", bio: "Priscilla leads our flagship leadership programs with passion and dedication.", imageUrl: "/placeholder.svg?height=400&width=300&text=Priscilla+Asher+John" },
+  { id: "3", name: "Waltong David Tyoden", position: "Co-Founder, IDELEH", bio: "Waltong builds partnerships with local communities and organizations.", imageUrl: "/placeholder.svg?height=400&width=300&text=Waltong+David+Tyoden" },
 ]
 
 export default async function TeamPage() {
@@ -82,7 +43,7 @@ export default async function TeamPage() {
             <div className="relative h-64 w-full">
               <Image
                 src={
-                  member.image_url || `/placeholder.svg?height=400&width=300&text=${encodeURIComponent(member.name)}`
+                  member.imageUrl || `/placeholder.svg?height=400&width=300&text=${encodeURIComponent(member.name)}`
                 }
                 alt={member.name}
                 fill

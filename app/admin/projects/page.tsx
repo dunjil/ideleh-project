@@ -4,8 +4,7 @@ import { useState, useEffect } from "react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { useToast } from "@/components/ui/use-toast"
-import { supabase } from "@/lib/supabase"
-import { getPublicStorageUrl } from "@/lib/storage-utils"
+import { getImageSrc } from "@/lib/image-utils"
 import { Plus, Edit, Trash2, Star, StarOff } from "lucide-react"
 import Image from "next/image"
 import Link from "next/link"
@@ -21,25 +20,11 @@ export default function ProjectsPage() {
 
   const fetchProjects = async () => {
     try {
-      const { data, error } = await supabase.from("projects").select("*").order("display_order", { ascending: true })
-
-      if (error) throw error
-
-      // Get public URLs for all images
-      const projectsWithUrls =
-        data?.map((project) => ({
-          ...project,
-          imageUrl: getPublicStorageUrl("assets", project.image_path),
-        })) || []
-
-      setProjects(projectsWithUrls)
-    } catch (error) {
-      console.error("Error fetching projects:", error)
-      toast({
-        title: "Error",
-        description: "Failed to load projects.",
-        variant: "destructive",
-      })
+      const res = await fetch("/api/admin/projects")
+      const data = await res.json()
+      setProjects(data.map((p: any) => ({ ...p, imageUrl: getImageSrc(p.image_data) })))
+    } catch {
+      toast({ title: "Error", description: "Failed to load projects.", variant: "destructive" })
     } finally {
       setIsLoading(false)
     }
@@ -47,51 +32,28 @@ export default function ProjectsPage() {
 
   const toggleFeatured = async (id: string, currentStatus: boolean) => {
     try {
-      const { error } = await supabase.from("projects").update({ is_featured: !currentStatus }).eq("id", id)
-
-      if (error) throw error
-
-      // Update local state
-      setProjects((prev) =>
-        prev.map((project) => (project.id === id ? { ...project, is_featured: !currentStatus } : project)),
-      )
-
-      toast({
-        title: `Project ${!currentStatus ? "Featured" : "Unfeatured"}`,
-        description: `The project has been ${!currentStatus ? "featured" : "unfeatured"}.`,
+      const res = await fetch(`/api/admin/projects/${id}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ is_featured: !currentStatus }),
       })
+      if (!res.ok) throw new Error((await res.json()).error)
+      setProjects((prev) => prev.map((p) => (p.id === id ? { ...p, is_featured: !currentStatus } : p)))
+      toast({ title: `Project ${!currentStatus ? "Featured" : "Unfeatured"}` })
     } catch (error: any) {
-      toast({
-        title: "Error",
-        description: error.message || "Failed to update project status.",
-        variant: "destructive",
-      })
+      toast({ title: "Error", description: error.message || "Failed to update project status.", variant: "destructive" })
     }
   }
 
   const deleteProject = async (id: string) => {
-    if (!confirm("Are you sure you want to delete this project? This action cannot be undone.")) {
-      return
-    }
-
+    if (!confirm("Are you sure you want to delete this project? This action cannot be undone.")) return
     try {
-      const { error } = await supabase.from("projects").delete().eq("id", id)
-
-      if (error) throw error
-
-      // Update local state
-      setProjects((prev) => prev.filter((project) => project.id !== id))
-
-      toast({
-        title: "Project Deleted",
-        description: "The project has been deleted successfully.",
-      })
+      const res = await fetch(`/api/admin/projects/${id}`, { method: "DELETE" })
+      if (!res.ok) throw new Error((await res.json()).error)
+      setProjects((prev) => prev.filter((p) => p.id !== id))
+      toast({ title: "Project Deleted" })
     } catch (error: any) {
-      toast({
-        title: "Error",
-        description: error.message || "Failed to delete project.",
-        variant: "destructive",
-      })
+      toast({ title: "Error", description: error.message || "Failed to delete project.", variant: "destructive" })
     }
   }
 

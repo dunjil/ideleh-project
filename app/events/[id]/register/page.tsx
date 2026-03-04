@@ -11,7 +11,6 @@ import { Label } from "@/components/ui/label"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { Textarea } from "@/components/ui/textarea"
 import { useToast } from "@/components/ui/use-toast"
-import { supabase } from "@/lib/supabase"
 
 interface RegistrationPageProps {
   params: {
@@ -44,29 +43,17 @@ export default function RegistrationPage({ params }: RegistrationPageProps) {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setIsSubmitting(true)
-
     try {
-      const { error } = await supabase.from("registrations").insert([
-        {
-          event_id: params.id,
-          ...formData,
-        },
-      ])
-
-      if (error) throw error
-
-      toast({
-        title: "Registration Successful",
-        description: "You have successfully registered for this event.",
+      const res = await fetch(`/api/admin/events/${params.id}/registrations`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ event_id: params.id, ...formData }),
       })
-
+      if (!res.ok) throw new Error((await res.json()).error)
+      toast({ title: "Registration Successful", description: "You have successfully registered for this event." })
       router.push(`/events/${params.id}/confirmation`)
     } catch (error: any) {
-      toast({
-        title: "Registration Failed",
-        description: error.message || "Something went wrong. Please try again.",
-        variant: "destructive",
-      })
+      toast({ title: "Registration Failed", description: error.message || "Something went wrong. Please try again.", variant: "destructive" })
     } finally {
       setIsSubmitting(false)
     }

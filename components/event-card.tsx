@@ -3,21 +3,20 @@ import Image from "next/image"
 import { Button } from "@/components/ui/button"
 import { Calendar } from "lucide-react"
 import { formatDate } from "@/lib/utils"
-import { supabase } from "@/lib/supabase"
+import { getImageSrc } from "@/lib/image-utils"
 
 interface EventCardProps {
   event: {
     id: string
     title: string
     description: string
-    image_path: string
+    image_data?: string
     event_date: string
   }
 }
 
 export function EventCard({ event }: EventCardProps) {
-  // Get the public URL for the image
-  const imageUrl = supabase.storage.from("events").getPublicUrl(event.image_path).data.publicUrl
+  const imageUrl = getImageSrc(event.image_data)
 
   return (
     <div className="overflow-hidden rounded-lg border bg-white shadow-md transition-all hover:shadow-lg dark:border-gray-700 dark:bg-gray-800">

@@ -2,20 +2,15 @@ import Link from "next/link"
 import Image from "next/image"
 import { Button } from "@/components/ui/button"
 import { formatDate } from "@/lib/utils"
-import { supabase } from "@/lib/supabase"
+import { query } from "@/lib/db"
+import { getImageSrc } from "@/lib/image-utils"
 
 async function getEvents() {
   try {
-    const { data, error } = await supabase.from("events").select("*").order("event_date", { ascending: false })
-
-    if (error) {
-      console.error("Error fetching events:", error)
-      return []
-    }
-
+    const data = await query("SELECT * FROM events ORDER BY event_date DESC")
     return data || []
-  } catch (error) {
-    console.error("Error fetching events:", error)
+  } catch (e) {
+    console.error("Error fetching events:", e)
     return []
   }
 }
@@ -95,26 +90,5 @@ export default async function AdminEventsPage() {
 
 // Helper function to safely get image URL
 function getImageUrl(imagePath: string | null | undefined): string {
-  if (!imagePath) {
-    return "/placeholder.svg?height=100&width=100"
-  }
-
-  // Check if it's a data URL
-  if (typeof imagePath === "string" && imagePath.startsWith("data:")) {
-    return imagePath
-  }
-
-  // Check if it's a URL
-  if (typeof imagePath === "string" && (imagePath.startsWith("http://") || imagePath.startsWith("https://"))) {
-    return imagePath
-  }
-
-  // Otherwise, assume it's a path in Supabase Storage
-  try {
-    const { data } = supabase.storage.from("events").getPublicUrl(imagePath)
-    return data?.publicUrl || "/placeholder.svg?height=100&width=100"
-  } catch (error) {
-    console.error("Error getting image URL:", error)
-    return "/placeholder.svg?height=100&width=100"
-  }
+  return getImageSrc(imagePath)
 }

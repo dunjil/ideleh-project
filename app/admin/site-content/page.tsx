@@ -7,7 +7,6 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import { useToast } from "@/components/ui/use-toast"
-import { supabase } from "@/lib/supabase"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Save } from "lucide-react"
 
@@ -27,31 +26,18 @@ export default function SiteContentPage() {
 
   const fetchSiteContent = async () => {
     try {
-      const { data, error } = await supabase.from("site_content").select("*").in("key", ["mission", "vision"])
-
-      if (error) throw error
-
+      const res = await fetch("/api/admin/site-content")
+      const data = await res.json()
       const contentMap: Record<string, { title: string; content: string }> = {
         mission: { title: "Our Mission", content: "" },
         vision: { title: "Our Vision", content: "" },
       }
-
-      // Map the data to our state structure
-      data.forEach((item) => {
-        contentMap[item.key] = {
-          title: item.title || contentMap[item.key].title,
-          content: item.content,
-        }
+      data.forEach((item: any) => {
+        contentMap[item.key] = { title: item.title || contentMap[item.key].title, content: item.content }
       })
-
       setContentData(contentMap)
-    } catch (error) {
-      console.error("Error fetching site content:", error)
-      toast({
-        title: "Error",
-        description: "Failed to load site content.",
-        variant: "destructive",
-      })
+    } catch {
+      toast({ title: "Error", description: "Failed to load site content.", variant: "destructive" })
     } finally {
       setIsLoading(false)
     }
@@ -69,32 +55,16 @@ export default function SiteContentPage() {
 
   const handleSave = async (key: string) => {
     setIsSaving(true)
-
     try {
-      const { error } = await supabase.from("site_content").upsert(
-        {
-          key,
-          title: contentData[key].title,
-          content: contentData[key].content,
-          last_updated: new Date().toISOString(),
-        },
-        {
-          onConflict: "key",
-        },
-      )
-
-      if (error) throw error
-
-      toast({
-        title: "Content Saved",
-        description: `The ${key} has been updated successfully.`,
+      const res = await fetch("/api/admin/site-content", {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ key, title: contentData[key].title, content: contentData[key].content }),
       })
+      if (!res.ok) throw new Error((await res.json()).error)
+      toast({ title: "Content Saved", description: `The ${key} has been updated successfully.` })
     } catch (error: any) {
-      toast({
-        title: "Error",
-        description: error.message || "Failed to save content.",
-        variant: "destructive",
-      })
+      toast({ title: "Error", description: error.message || "Failed to save content.", variant: "destructive" })
     } finally {
       setIsSaving(false)
     }

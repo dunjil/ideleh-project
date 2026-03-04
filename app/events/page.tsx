@@ -1,28 +1,16 @@
 import { Button } from "@/components/ui/button"
 import Link from "next/link"
 import Image from "next/image"
-import { Calendar, Clock, MapPin } from "lucide-react"
-import { supabase } from "@/lib/supabase"
-import { getPublicStorageUrl } from "@/lib/storage-utils"
+import { Calendar, MapPin } from "lucide-react"
+import { query } from "@/lib/db"
+import { getImageSrc } from "@/lib/image-utils"
 
 async function getEvents() {
   try {
-    const { data, error } = await supabase
-      .from("events")
-      .select("*")
-      .order("event_date", { ascending: false }) // Newest first
-
-    if (error) {
-      console.error("Error fetching events:", error)
-      return []
-    }
-
-    return data.map(event => ({
-      ...event,
-      imageUrl: event.image_path ? getPublicStorageUrl("events", event.image_path) : null
-    })) || []
-  } catch (error) {
-    console.error("Error fetching events:", error)
+    const data = await query("SELECT * FROM events ORDER BY event_date DESC")
+    return data.map((event) => ({ ...event, imageUrl: getImageSrc(event.image_data) }))
+  } catch (e) {
+    console.error("Error fetching events:", e)
     return []
   }
 }
@@ -70,10 +58,10 @@ export default async function EventsPage() {
       {/* Upcoming Events */}
       <div className="mt-16">
         <h2 className="mb-8 text-2xl font-bold">Upcoming Events</h2>
-        
+
         {upcoming.length > 0 ? (
           <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
-            {upcoming.map(event => (
+            {upcoming.map((event: any) => (
               <EventCard key={event.id} event={event} isUpcoming={true} />
             ))}
           </div>
@@ -89,10 +77,10 @@ export default async function EventsPage() {
       {/* Past Events */}
       <div className="mt-24">
         <h2 className="mb-8 text-2xl font-bold">Past Events</h2>
-        
+
         {past.length > 0 ? (
           <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
-            {past.map(event => (
+            {past.map((event: any) => (
               <EventCard key={event.id} event={event} isUpcoming={false} />
             ))}
           </div>
@@ -133,7 +121,7 @@ function EventCard({ event, isUpcoming }: { event: any, isUpcoming: boolean }) {
           <Calendar className="mr-2 h-4 w-4" />
           <span>{formatEventDate(event.event_date)}</span>
         </div>
-        
+
         {event.location && (
           <div className="mb-2 flex items-center text-sm text-gray-500 dark:text-gray-400">
             <MapPin className="mr-2 h-4 w-4" />
@@ -145,7 +133,7 @@ function EventCard({ event, isUpcoming }: { event: any, isUpcoming: boolean }) {
         <p className="mb-4 text-gray-600 dark:text-gray-400 line-clamp-3">
           {event.description}
         </p>
-        
+
         <div className="flex justify-between">
           <Button asChild variant="outline" size="sm">
             <Link href={`/events/${event.id}`}>View Details</Link>

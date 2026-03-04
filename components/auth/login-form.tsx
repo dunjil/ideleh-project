@@ -5,13 +5,12 @@ import { useRouter } from "next/navigation"
 import { useState } from "react"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
+import Link from "next/link"
 
 import { Button } from "@/components/ui/button"
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
 import { useToast } from "@/components/ui/use-toast"
-import { supabase } from "@/lib/supabase"
-import Link from "next/link"
 
 const formSchema = z.object({
   email: z.string().email({ message: "Please enter a valid email address" }),
@@ -25,38 +24,25 @@ export function LoginForm() {
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
-    defaultValues: {
-      email: "",
-      password: "",
-    },
+    defaultValues: { email: "", password: "" },
   })
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
     setIsLoading(true)
-
     try {
-      const { error } = await supabase.auth.signInWithPassword({
-        email: values.email,
-        password: values.password,
+      const res = await fetch("/api/auth/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(values),
       })
+      const data = await res.json()
+      if (!res.ok) throw new Error(data.error || "Login failed")
 
-      if (error) {
-        throw error
-      }
-
-      toast({
-        title: "Success",
-        description: "You have successfully signed in",
-      })
-
+      toast({ title: "Success", description: "You have successfully signed in" })
       router.push("/dashboard")
       router.refresh()
     } catch (error: any) {
-      toast({
-        title: "Error",
-        description: error.message || "Invalid credentials",
-        variant: "destructive",
-      })
+      toast({ title: "Error", description: error.message || "Invalid credentials", variant: "destructive" })
     } finally {
       setIsLoading(false)
     }

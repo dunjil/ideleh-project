@@ -1,26 +1,27 @@
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
-import { supabase } from "@/lib/supabase"
+import { query } from "@/lib/db"
 
 async function getRegistrationsWithEvents() {
-  const { data, error } = await supabase
-    .from("registrations")
-    .select(`
-      *,
-      events:event_id (
-        id,
-        title,
-        event_date
-      )
-    `)
-    .order("created_at", { ascending: false })
+  const data = await query(`
+    SELECT 
+      r.*,
+      e.id as event_id,
+      e.title as event_title,
+      e.event_date as event_date
+    FROM registrations r
+    LEFT JOIN events e ON r.event_id = e.id
+    ORDER BY r.created_at DESC
+  `)
 
-  if (error) {
-    console.error("Error fetching registrations:", error)
-    return []
-  }
-
-  return data || []
+  return data.map((row) => ({
+    ...row,
+    events: {
+      id: row.event_id,
+      title: row.event_title,
+      event_date: row.event_date
+    }
+  }))
 }
 
 export default async function AdminRegistrationsPage() {
@@ -58,7 +59,7 @@ export default async function AdminRegistrationsPage() {
                   <div>
                     <h3 className="font-medium">{group.event.title}</h3>
                     <p className="text-sm text-gray-500 dark:text-gray-400">
-                      {new Date(group.event.event_date).toLocaleDateString()} |{group.count}{" "}
+                      {new Date(group.event.event_date).toLocaleDateString()} | {group.count}{" "}
                       {group.count === 1 ? "registration" : "registrations"}
                     </p>
                   </div>

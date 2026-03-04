@@ -1,20 +1,16 @@
 import Image from "next/image"
-import { supabase } from "@/lib/supabase"
-import { getPublicStorageUrl } from "@/lib/storage-utils"
+import { query } from "@/lib/db"
+import { getImageSrc } from "@/lib/image-utils"
 
-// Function to get a random gallery image
 async function getRandomGalleryImage() {
-  const { data, error } = await supabase.from("gallery").select("*").limit(10)
-
-  if (error || !data || data.length === 0) {
-    console.error("Error fetching random gallery image:", error)
+  try {
+    const data = await query("SELECT image_data FROM gallery LIMIT 10")
+    if (!data.length) return null
+    const random = data[Math.floor(Math.random() * data.length)]
+    return getImageSrc(random.image_data)
+  } catch {
     return null
   }
-
-  const randomIndex = Math.floor(Math.random() * data.length)
-  const randomImage = data[randomIndex]
-
-  return getPublicStorageUrl("gallery", randomImage.image_path)
 }
 
 export default async function AboutPage() {

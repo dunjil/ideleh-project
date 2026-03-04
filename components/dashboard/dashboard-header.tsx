@@ -9,20 +9,18 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
-import { supabase } from "@/lib/supabase"
-import type { User } from "@supabase/supabase-js"
 import { LogOut, UserIcon } from "lucide-react"
 import { useRouter } from "next/navigation"
 
 interface DashboardHeaderProps {
-  user: User
+  user: { email?: string }
 }
 
 export function DashboardHeader({ user }: DashboardHeaderProps) {
   const router = useRouter()
 
   const handleSignOut = async () => {
-    await supabase.auth.signOut()
+    await fetch("/api/auth/logout", { method: "POST" })
     router.push("/")
     router.refresh()
   }
@@ -30,7 +28,7 @@ export function DashboardHeader({ user }: DashboardHeaderProps) {
   return (
     <header className="sticky top-0 z-10 border-b bg-background px-4 py-3">
       <div className="mx-auto flex max-w-7xl items-center justify-between">
-        <h1 className="text-xl font-bold">Supabase App</h1>
+        <h1 className="text-xl font-bold">IDELEH Dashboard</h1>
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="ghost" className="relative h-8 w-8 rounded-full">

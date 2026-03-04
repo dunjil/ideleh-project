@@ -1,5 +1,5 @@
-import { supabase } from "@/lib/supabase"
-import { getPublicStorageUrl } from "@/lib/storage-utils"
+import { query } from "@/lib/db"
+import { getImageSrc } from "@/lib/image-utils"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { PlusCircle } from "lucide-react"
@@ -9,42 +9,17 @@ import { TeamMemberActions } from "@/components/admin/team-member-actions"
 export const dynamic = "force-dynamic"
 
 async function getTeamMembers() {
-  const { data, error } = await supabase.from("team_members").select("*").order("name", { ascending: true })
-
-  if (error) {
-    console.error("Error fetching team members:", error)
-    throw new Error(`Failed to fetch team members: ${error.message}`)
-  }
-
+  const data = await query("SELECT * FROM team_members ORDER BY name ASC")
   return data.map((member) => ({
     id: member.id,
     name: member.name,
     position: member.position,
     bio: member.bio || "",
-    imageUrl: member.image_url || (member.image_path ? getPublicStorageUrl("team", member.image_path) : null),
+    imageUrl: getImageSrc(member.image_data),
   }))
 }
 
-async function ensureTeamBucketExists() {
-  try {
-    // Check if the bucket exists
-    const { data: buckets } = await supabase.storage.listBuckets()
-    const teamBucketExists = buckets?.some((bucket) => bucket.name === "team")
-
-    // Create the bucket if it doesn't exist
-    if (!teamBucketExists) {
-      await supabase.storage.createBucket("team", {
-        public: true,
-        fileSizeLimit: 5242880, // 5MB
-      })
-    }
-  } catch (error) {
-    console.error("Error ensuring team bucket exists:", error)
-  }
-}
-
 export default async function AdminTeamPage() {
-  await ensureTeamBucketExists()
   const teamMembers = await getTeamMembers()
 
   return (
@@ -72,9 +47,7 @@ export default async function AdminTeamPage() {
             >
               <div className="relative h-64 w-full">
                 <Image
-                  src={
-                    member.imageUrl || `/placeholder.svg?height=400&width=300&text=${encodeURIComponent(member.name)}`
-                  }
+                  src={member.imageUrl || `/placeholder.svg?height=400&width=300&text=${encodeURIComponent(member.name)}`}
                   alt={member.name}
                   fill
                   className="object-scale-down"

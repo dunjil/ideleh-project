@@ -13,7 +13,7 @@ import { useRouter } from "next/navigation"
 import { ArrowLeft, Loader2 } from "lucide-react"
 import Link from "next/link"
 import { Checkbox } from "@/components/ui/checkbox"
-import { getPublicStorageUrl } from "@/lib/storage-utils"
+import { getImageSrc } from "@/lib/image-utils"
 
 interface TeamMember {
   id: string
@@ -44,11 +44,8 @@ export default function EditTeamMemberPage({ params }: { params: { id: string } 
 
         setTeamMember(result.data)
 
-        // Set image preview if there's an existing image
-        if (result.data.image_url) {
-          setImagePreview(result.data.image_url)
-        } else if (result.data.image_path) {
-          setImagePreview(getPublicStorageUrl("team", result.data.image_path))
+        if (result.data.image_data) {
+          setImagePreview(getImageSrc(result.data.image_data))
         }
       } catch (err) {
         setError((err as Error).message || "An unexpected error occurred")
@@ -107,14 +104,6 @@ export default function EditTeamMemberPage({ params }: { params: { id: string } 
       reader.readAsDataURL(file)
       setKeepExistingImage(false)
     } else {
-      // If no file is selected, keep the existing image
-      if (teamMember?.image_url) {
-        setImagePreview(teamMember.image_url)
-      } else if (teamMember?.image_path) {
-        setImagePreview(getPublicStorageUrl("team", teamMember.image_path))
-      } else {
-        setImagePreview(null)
-      }
       setKeepExistingImage(true)
     }
   }

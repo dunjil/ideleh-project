@@ -3,35 +3,28 @@ import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { Calendar, Clock, MapPin } from "lucide-react"
 import { formatDate } from "@/lib/utils"
-import { supabase } from "@/lib/supabase"
+import { query } from "@/lib/db"
+import { getImageSrc } from "@/lib/image-utils"
 import { notFound } from "next/navigation"
 
 interface EventPageProps {
-  params: {
-    id: string
-  }
+  params: { id: string }
 }
 
 async function getEvent(id: string) {
-  const { data, error } = await supabase.from("events").select("*").eq("id", id).single()
-
-  if (error) {
-    console.error("Error fetching event:", error)
+  try {
+    const [row] = await query("SELECT * FROM events WHERE id = $1", [id])
+    return row || null
+  } catch (e) {
+    console.error("Error fetching event:", e)
     return null
   }
-
-  return data
 }
 
 export default async function EventPage({ params }: EventPageProps) {
   const event = await getEvent(params.id)
-
-  if (!event) {
-    notFound()
-  }
-
-  // Get the public URL for the image
-  const imageUrl = supabase.storage.from("events").getPublicUrl(event.image_path).data.publicUrl
+  if (!event) notFound()
+  const imageUrl = getImageSrc(event.image_data)
 
   const eventDate = new Date(event.event_date)
   const isPastEvent = eventDate < new Date()

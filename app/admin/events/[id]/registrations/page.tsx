@@ -4,7 +4,6 @@ import { useState, useEffect } from "react"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { downloadCSV } from "@/lib/utils"
-import { supabase } from "@/lib/supabase"
 
 interface RegistrationsPageProps {
   params: {
@@ -20,33 +19,20 @@ export default function RegistrationsPage({ params }: RegistrationsPageProps) {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        // Fetch event details
-        const { data: eventData, error: eventError } = await supabase
-          .from("events")
-          .select("*")
-          .eq("id", params.id)
-          .single()
-
-        if (eventError) throw eventError
-
-        // Fetch registrations for this event
-        const { data: registrationsData, error: registrationsError } = await supabase
-          .from("registrations")
-          .select("*")
-          .eq("event_id", params.id)
-          .order("created_at", { ascending: false })
-
-        if (registrationsError) throw registrationsError
-
+        const [eventRes, regRes] = await Promise.all([
+          fetch(`/api/admin/events/${params.id}`),
+          fetch(`/api/admin/events/${params.id}/registrations`),
+        ])
+        const eventData = await eventRes.json()
+        const regData = await regRes.json()
         setEvent(eventData)
-        setRegistrations(registrationsData || [])
+        setRegistrations(Array.isArray(regData) ? regData : [])
       } catch (error) {
         console.error("Error fetching data:", error)
       } finally {
         setIsLoading(false)
       }
     }
-
     fetchData()
   }, [params.id])
 

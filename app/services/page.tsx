@@ -1,21 +1,18 @@
 import Image from "next/image"
 import { Lightbulb, Users, Building2 } from "lucide-react"
-import { supabase } from "@/lib/supabase"
-import { getPublicStorageUrl } from "@/lib/storage-utils"
+import { query } from "@/lib/db"
+import { getImageSrc } from "@/lib/image-utils"
 
 // Function to get a random gallery image
 async function getRandomGalleryImage() {
-  const { data, error } = await supabase.from("gallery").select("*").limit(10)
-
-  if (error || !data || data.length === 0) {
+  try {
+    const data = await query("SELECT image_data FROM gallery ORDER BY RANDOM() LIMIT 1")
+    if (!data || data.length === 0) return null
+    return getImageSrc(data[0].image_data)
+  } catch (error) {
     console.error("Error fetching random gallery image:", error)
     return null
   }
-
-  const randomIndex = Math.floor(Math.random() * data.length)
-  const randomImage = data[randomIndex]
-
-  return getPublicStorageUrl("gallery", randomImage.image_path)
 }
 
 export default async function ServicesPage() {

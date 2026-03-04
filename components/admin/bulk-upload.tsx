@@ -1,7 +1,6 @@
 "use client"
 
 import type React from "react"
-
 import { useState, useRef } from "react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
@@ -9,8 +8,7 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Progress } from "@/components/ui/progress"
 import { useToast } from "@/components/ui/use-toast"
-import { uploadMultipleToStorage } from "@/lib/storage-utils"
-import { supabase } from "@/lib/supabase"
+import { fileToBase64 } from "@/lib/image-utils"
 import { X, Upload } from "lucide-react"
 
 interface BulkUploadProps {
@@ -74,64 +72,40 @@ export function BulkUpload({
 
   const handleUpload = async () => {
     if (files.length === 0) return
-
     setIsUploading(true)
     setProgress(0)
     setUploadedCount(0)
     setFailedCount(0)
-
+    let succeeded = 0
+    let failed = 0
     try {
-      // Upload files to storage
-      const results = await uploadMultipleToStorage(files, bucket)
-
-      setUploadedCount(results.successful.length)
-      setFailedCount(results.failed.length)
-
-      // If this is for the gallery, add entries to the gallery table
-      if (bucket === "gallery") {
-        for (const { file, path } of results.successful) {
-          const { error } = await supabase.from("gallery").insert([
-            {
-              title: file.name.split(".")[0].replace(/-/g, " "),
-              image_path: path,
-            },
-          ])
-
-          if (error) {
-            console.error("Error adding to gallery table:", error)
-            setFailedCount((prev) => prev + 1)
-            setUploadedCount((prev) => prev - 1)
-          }
-        }
+      for (let i = 0; i < files.length; i++) {
+        try {
+          const image_data = await fileToBase64(files[i])
+          const title = files[i].name.split(".")[0].replace(/-/g, " ")
+          const res = await fetch("/api/admin/gallery", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ title, image_data }),
+          })
+          if (res.ok) { succeeded++ } else { failed++ }
+        } catch { failed++ }
+        setProgress(Math.round(((i + 1) / files.length) * 100))
+        setUploadedCount(succeeded)
+        setFailedCount(failed)
       }
-
-      // Show success message
       toast({
         title: "Upload Complete",
-        description: `Successfully uploaded ${results.successful.length} files. ${results.failed.length > 0 ? `Failed to upload ${results.failed.length} files.` : ""}`,
-        variant: results.failed.length > 0 ? "destructive" : "default",
+        description: `Successfully uploaded ${succeeded} files.${failed > 0 ? ` Failed: ${failed}.` : ""}`,
+        variant: failed > 0 ? "destructive" : "default",
       })
-
-      // Reset the form if all uploads were successful
-      if (results.failed.length === 0) {
-        setFiles([])
-        setPreviews([])
-        if (fileInputRef.current) {
-          fileInputRef.current.value = ""
-        }
+      if (failed === 0) {
+        setFiles([]); setPreviews([])
+        if (fileInputRef.current) fileInputRef.current.value = ""
       }
-
-      // Call the onComplete callback if provided
-      if (onComplete) {
-        onComplete()
-      }
-    } catch (error) {
-      console.error("Error during bulk upload:", error)
-      toast({
-        title: "Upload Failed",
-        description: "An error occurred during the upload process.",
-        variant: "destructive",
-      })
+      if (onComplete) onComplete()
+    } catch {
+      toast({ title: "Upload Failed", description: "An error occurred during the upload process.", variant: "destructive" })
     } finally {
       setIsUploading(false)
       setProgress(100)

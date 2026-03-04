@@ -1,25 +1,13 @@
 import Image from "next/image"
-import { supabase } from "@/lib/supabase"
-import { getPublicStorageUrl } from "@/lib/storage-utils"
+import { query } from "@/lib/db"
+import { getImageSrc } from "@/lib/image-utils"
 
 async function getGalleryImages() {
   try {
-    const { data, error } = await supabase.from("gallery").select("*").order("created_at", { ascending: false })
-
-    if (error) {
-      console.error("Error fetching gallery images:", error)
-      return []
-    }
-
-    return (
-      data.map((item) => ({
-        id: item.id,
-        title: item.title,
-        imageUrl: getPublicStorageUrl("gallery", item.image_path),
-      })) || []
-    )
-  } catch (error) {
-    console.error("Error fetching gallery images:", error)
+    const data = await query("SELECT * FROM gallery ORDER BY created_at DESC")
+    return data.map((item) => ({ id: item.id, title: item.title, imageUrl: getImageSrc(item.image_data) }))
+  } catch (e) {
+    console.error("Error fetching gallery images:", e)
     return []
   }
 }

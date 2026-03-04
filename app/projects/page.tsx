@@ -1,34 +1,15 @@
 import Image from "next/image"
 import { Button } from "@/components/ui/button"
 import Link from "next/link"
-import { supabase } from "@/lib/supabase"
-import { getPublicStorageUrl } from "@/lib/storage-utils"
+import { query } from "@/lib/db"
+import { getImageSrc } from "@/lib/image-utils"
 
 async function getProjects() {
   try {
-    console.log("Fetching all projects...")
-    const { data, error } = await supabase.from("projects").select("*").order("display_order", { ascending: true })
-
-    if (error) {
-      console.error("Error fetching projects:", error)
-      return []
-    }
-
-    console.log("Projects data:", data)
-
-    if (!data || data.length === 0) {
-      console.log("No projects found in database")
-      return []
-    }
-
-    return data.map((project) => ({
-      id: project.id,
-      title: project.title,
-      description: project.description,
-      imageUrl: project.image_path ? getPublicStorageUrl("assets", project.image_path) : null,
-    }))
-  } catch (error) {
-    console.error("Error in getProjects:", error)
+    const data = await query("SELECT * FROM projects ORDER BY display_order ASC")
+    return data.map((p) => ({ id: p.id, title: p.title, description: p.description, imageUrl: getImageSrc(p.image_data) }))
+  } catch (e) {
+    console.error("Error in getProjects:", e)
     return []
   }
 }
