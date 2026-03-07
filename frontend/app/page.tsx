@@ -57,9 +57,13 @@ export default async function Home() {
     { id: "1", title: "IDEAL LEADERSHIP HUB", description: "Empowering the next generation of leaders through strategic trainings and mentorship.", imageUrl: "/placeholder.svg?height=1080&width=1920", ctaText: "Join Us", ctaLink: "/events" }
   ]
 
-  const purposeImageSrc = (galleryImages[0] && galleryImages[0].image_data)
-    ? getImageSrc(galleryImages[0].image_data)
-    : encodeURI("/images/Nation Building Conference University of Jos, 2024/IMG-20240627-WA0014.jpg")
+  let purposeImageSrc = "/images/purpose.jpg"
+  if (galleryImages[0] && galleryImages[0].image_data) {
+    const src = getImageSrc(galleryImages[0].image_data)
+    if (src !== "/placeholder.svg" && !src.toLowerCase().endsWith('.heic')) {
+      purposeImageSrc = src
+    }
+  }
 
   return (
     <div className="flex flex-col min-h-screen">
@@ -118,7 +122,7 @@ export default async function Home() {
               <div className="relative animate-float">
                 <div className="absolute inset-0 bg-primary/10 dark:bg-primary/5 rounded-[2rem] rotate-3 scale-105" />
                 <div className="relative h-[650px] overflow-hidden rounded-[2rem] shadow-2xl border border-white/20 dark:border-white/10 bg-card">
-                  <Image src={purposeImageSrc} alt="IDELEH Impact" fill className="object-cover" />
+                  <img src={purposeImageSrc} alt="IDELEH Impact" className="object-cover w-full h-full" />
                 </div>
                 <div className="absolute -bottom-8 -left-8 glass-card border border-white/20 dark:border-white/10 p-6 rounded-2xl shadow-xl max-w-[220px] animate-bounce" style={{ animationDuration: '4s' }}>
                   <p className="text-4xl font-display font-bold text-primary mb-1">1000+</p>
@@ -190,9 +194,9 @@ export default async function Home() {
                         project.image_data && getImageSrc(project.image_data) !== "/placeholder.svg"
                           ? getImageSrc(project.image_data)
                           : (
-                            project.title === "LeaderZ Conferences" ? encodeURI("/images/Nation Building Conference University of Jos, 2024/IMG-20240627-WA0011.jpg") :
-                              project.title === "Nation Building Conferences" ? encodeURI("/images/Nation Building Conference University of Jos, 2024/IMG-20240627-WA0039.jpg") :
-                                project.title === "Mentorship Hub" ? encodeURI("/images/Nation Building Conference, Federal College of Education Pankshin 2024/_BIL4893.jpg") :
+                            project.title === "LeaderZ Conferences" ? "/images/leaderz.jpg" :
+                              project.title === "Nation Building Conferences" ? "/images/nbc.jpg" :
+                                project.title === "Mentorship Hub" ? "/images/mentorship.jpg" :
                                   "/placeholder.svg"
                           )
                       }
@@ -210,9 +214,9 @@ export default async function Home() {
                 </div>
               </ScrollReveal>
             )) : [
-              { title: "LeaderZ Conferences", desc: "The LeaderZ Conference aims to redefine the way secondary school prefects are trained, mentored, and empowered.", img: encodeURI("/images/Nation Building Conference University of Jos, 2024/IMG-20240627-WA0011.jpg") },
-              { title: "Nation Building Conferences", desc: "Designed to inspire aspiring leaders to position themselves with the requisite knowledge and values required to address national challenges.", img: encodeURI("/images/Nation Building Conference University of Jos, 2024/IMG-20240627-WA0039.jpg") },
-              { title: "Mentorship Hub", desc: "A transformative learning experience empowering mentors and mentees.", img: encodeURI("/images/Nation Building Conference, Federal College of Education Pankshin 2024/_BIL4893.jpg") }
+              { title: "LeaderZ Conferences", desc: "The LeaderZ Conference aims to redefine the way secondary school prefects are trained, mentored, and empowered.", img: "/images/leaderz.jpg" },
+              { title: "Nation Building Conferences", desc: "Designed to inspire aspiring leaders to position themselves with the requisite knowledge and values required to address national challenges.", img: "/images/nbc.jpg" },
+              { title: "Mentorship Hub", desc: "A transformative learning experience empowering mentors and mentees.", img: "/images/mentorship.jpg" }
             ].map((p, i) => (
               <ScrollReveal delay={i * 0.15} key={i}>
                 <div className="group flex flex-col h-full bg-card overflow-hidden rounded-3xl shadow-lg border border-border hover:shadow-xl transition-all duration-500 hover:-translate-y-2">

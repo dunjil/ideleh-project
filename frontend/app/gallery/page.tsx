@@ -3,14 +3,14 @@ import { api } from "@/lib/api"
 import { getImageSrc } from "@/lib/image-utils"
 
 const fallbackGalleryImages = [
-  { id: 1, title: "Nation Building Conference", imageUrl: encodeURI("/images/Nation Building Conference University of Jos, 2024/IMG-20240627-WA0011.jpg") },
-  { id: 2, title: "Jos 2024", imageUrl: encodeURI("/images/Nation Building Conference University of Jos, 2024/IMG-20240627-WA0014.jpg") },
-  { id: 3, title: "Leadership Workshop", imageUrl: encodeURI("/images/Nation Building Conference University of Jos, 2024/IMG-20240627-WA0037.jpg") },
-  { id: 4, title: "Mentorship", imageUrl: encodeURI("/images/Nation Building Conference University of Jos, 2024/IMG-20240627-WA0039.jpg") },
-  { id: 5, title: "Training", imageUrl: encodeURI("/images/Nation Building Conference University of Jos, 2024/IMG-20240627-WA0040.jpg") },
-  { id: 6, title: "Community", imageUrl: encodeURI("/images/Nation Building Conference, Federal College of Education Pankshin 2024/_BIL4737.jpg") },
-  { id: 7, title: "Keynote", imageUrl: encodeURI("/images/Nation Building Conference, Federal College of Education Pankshin 2024/_BIL4893.jpg") },
-  { id: 8, title: "Networking", imageUrl: encodeURI("/images/Nation Building Conference, Federal College of Education Pankshin 2024/_BIL4932.jpg") }
+  { id: 1, title: "Nation Building Conference", imageUrl: "/images/leaderz.jpg" },
+  { id: 2, title: "Jos 2024", imageUrl: "/images/purpose.jpg" },
+  { id: 3, title: "Leadership Workshop", imageUrl: "/images/workshop.jpg" },
+  { id: 4, title: "Mentorship", imageUrl: "/images/nbc.jpg" },
+  { id: 5, title: "Training", imageUrl: "/images/training.jpg" },
+  { id: 6, title: "Community", imageUrl: "/images/community.jpg" },
+  { id: 7, title: "Keynote", imageUrl: "/images/mentorship.jpg" },
+  { id: 8, title: "Networking", imageUrl: "/images/networking.jpg" }
 ];
 
 async function getGalleryImages() {

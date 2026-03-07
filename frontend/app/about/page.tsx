@@ -28,7 +28,7 @@ export default async function AboutPage() {
       <div className="mt-16 grid gap-12 md:grid-cols-2 md:items-center">
         <div className="relative h-[400px] overflow-hidden rounded-lg shadow-xl">
           <Image
-            src={randomGalleryImage || encodeURI("/images/Nation Building Conference University of Jos, 2024/IMG-20240627-WA0147.jpg")}
+            src={randomGalleryImage || "/images/about.jpg"}
             alt="About IDELEH"
             fill
             className="object-cover"

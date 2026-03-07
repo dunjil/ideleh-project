@@ -52,7 +52,7 @@ export default async function ServicesPage() {
           </div>
           <div className="relative h-[300px] overflow-hidden rounded-lg shadow-xl order-1 md:order-2">
             <Image
-              src={trainingImage || encodeURI("/images/Nation Building Conference University of Jos, 2024/IMG-20240627-WA0014.jpg")}
+              src={trainingImage || "/images/purpose.jpg"}
               alt="Leadership Training"
               fill
               className="object-cover rounded-xl"
@@ -64,7 +64,7 @@ export default async function ServicesPage() {
         <div className="grid gap-12 md:grid-cols-2 md:items-center">
           <div className="relative h-[300px] overflow-hidden rounded-lg shadow-xl">
             <Image
-              src={mentorshipImage || encodeURI("/images/Nation Building Conference University of Jos, 2024/IMG-20240627-WA0090.jpg")}
+              src={mentorshipImage || "/images/mentorship2.jpg"}
               alt="Mentorship Program"
               fill
               className="object-cover rounded-xl"
@@ -108,7 +108,7 @@ export default async function ServicesPage() {
           </div>
           <div className="relative h-[300px] overflow-hidden rounded-lg shadow-xl order-1 md:order-2">
             <Image
-              src={consultationImage || encodeURI("/images/Nation Building Conference, Federal College of Education Pankshin 2024/_BIL4737.jpg")}
+              src={consultationImage || "/images/community.jpg"}
               alt="Corporate Consultation"
               fill
               className="object-cover rounded-xl"

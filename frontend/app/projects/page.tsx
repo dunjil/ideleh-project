@@ -50,10 +50,10 @@ export default async function ProjectsPage() {
                 <Image
                   src={
                     project.imageUrl !== "/placeholder.svg" ? project.imageUrl : (
-                      project.title === "LeaderZ Conferences" ? encodeURI("/images/Nation Building Conference University of Jos, 2024/IMG-20240627-WA0011.jpg") :
-                        project.title === "Nation Building Conferences" ? encodeURI("/images/Nation Building Conference University of Jos, 2024/IMG-20240627-WA0039.jpg") :
-                          project.title === "Mentorship Hub" ? encodeURI("/images/Nation Building Conference, Federal College of Education Pankshin 2024/_BIL4893.jpg") :
-                            encodeURI("/images/Nation Building Conference University of Jos, 2024/IMG-20240627-WA0011.jpg")
+                      project.title === "LeaderZ Conferences" ? "/images/leaderz.jpg" :
+                        project.title === "Nation Building Conferences" ? "/images/nbc.jpg" :
+                          project.title === "Mentorship Hub" ? "/images/mentorship.jpg" :
+                            "/images/leaderz.jpg"
                     )
                   }
                   alt={project.title}
@@ -115,7 +115,7 @@ export default async function ProjectsPage() {
           </div>
           <div className="relative h-[400px] overflow-hidden rounded-lg shadow-xl order-1 md:order-2">
             <Image
-              src={encodeURI("/images/Nation Building Conference University of Jos, 2024/IMG-20240627-WA0011.jpg")}
+              src={"/images/leaderz.jpg"}
               alt="LeaderZ Conferences"
               fill
               className="object-cover"
@@ -127,7 +127,7 @@ export default async function ProjectsPage() {
         <div className="grid gap-12 md:grid-cols-2 md:items-center">
           <div className="relative h-[400px] overflow-hidden rounded-lg shadow-xl">
             <Image
-              src={encodeURI("/images/Nation Building Conference University of Jos, 2024/IMG-20240627-WA0039.jpg")}
+              src={"/images/nbc.jpg"}
               alt="Nation Building Conferences"
               fill
               className="object-cover"
@@ -189,7 +189,7 @@ export default async function ProjectsPage() {
           </div>
           <div className="relative h-[400px] overflow-hidden rounded-lg shadow-xl order-1 md:order-2">
             <Image
-              src={encodeURI("/images/Nation Building Conference, Federal College of Education Pankshin 2024/_BIL4893.jpg")}
+              src={"/images/mentorship.jpg"}
               alt="Mentorship Hub"
               fill
               className="object-cover"

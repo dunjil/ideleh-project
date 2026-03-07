@@ -7,7 +7,7 @@ BACKEND_PID=$!
 
 # Start Next.js Frontend
 echo "Starting Next.js Frontend..."
-npm run dev &
+cd frontend && npm run dev &
 FRONTEND_PID=$!
 
 echo "Services started (PIDs: $BACKEND_PID, $FRONTEND_PID)"
