@@ -1,27 +1,24 @@
 import Image from "next/image"
 import { Lightbulb, Users, Building2 } from "lucide-react"
-import { query } from "@/lib/db"
+import { api } from "@/lib/api"
 import { getImageSrc } from "@/lib/image-utils"
 
-// Function to get a random gallery image
-async function getRandomGalleryImage() {
+async function getGalleryImagesSafely() {
   try {
-    const data = await query("SELECT image_data FROM gallery ORDER BY RANDOM() LIMIT 1")
-    if (!data || data.length === 0) return null
-    return getImageSrc(data[0].image_data)
+    const data = await api.gallery.getAll()
+    return data || []
   } catch (error) {
-    console.error("Error fetching random gallery image:", error)
-    return null
+    console.error("Error fetching gallery images:", error)
+    return []
   }
 }
 
 export default async function ServicesPage() {
-  // Fetch separate images for each service
-  const [trainingImage, mentorshipImage, consultationImage] = await Promise.all([
-    getRandomGalleryImage(),
-    getRandomGalleryImage(),
-    getRandomGalleryImage(),
-  ])
+  const images = await getGalleryImagesSafely()
+
+  const trainingImage = images.length > 0 ? getImageSrc(images[Math.floor(Math.random() * images.length)].image_data) : null
+  const mentorshipImage = images.length > 1 ? getImageSrc(images[Math.floor(Math.random() * images.length)].image_data) : null
+  const consultationImage = images.length > 2 ? getImageSrc(images[Math.floor(Math.random() * images.length)].image_data) : null
 
   return (
     <div className="container mx-auto px-4 py-16 md:py-24">
@@ -55,10 +52,10 @@ export default async function ServicesPage() {
           </div>
           <div className="relative h-[300px] overflow-hidden rounded-lg shadow-xl order-1 md:order-2">
             <Image
-              src={trainingImage || "/placeholder.svg?height=600&width=800&text=Leadership+Training"}
+              src={trainingImage || encodeURI("/images/Nation Building Conference University of Jos, 2024/IMG-20240627-WA0014.jpg")}
               alt="Leadership Training"
               fill
-              className="object-scale-down"
+              className="object-cover rounded-xl"
             />
           </div>
         </div>
@@ -67,10 +64,10 @@ export default async function ServicesPage() {
         <div className="grid gap-12 md:grid-cols-2 md:items-center">
           <div className="relative h-[300px] overflow-hidden rounded-lg shadow-xl">
             <Image
-              src={mentorshipImage || "/placeholder.svg?height=600&width=800&text=Mentorship+Program"}
+              src={mentorshipImage || encodeURI("/images/Nation Building Conference University of Jos, 2024/IMG-20240627-WA0090.jpg")}
               alt="Mentorship Program"
               fill
-              className="object-scale-down"
+              className="object-cover rounded-xl"
             />
           </div>
           <div>
@@ -111,10 +108,10 @@ export default async function ServicesPage() {
           </div>
           <div className="relative h-[300px] overflow-hidden rounded-lg shadow-xl order-1 md:order-2">
             <Image
-              src={consultationImage || "/placeholder.svg?height=600&width=800&text=Corporate+Consultation"}
+              src={consultationImage || encodeURI("/images/Nation Building Conference, Federal College of Education Pankshin 2024/_BIL4737.jpg")}
               alt="Corporate Consultation"
               fill
-              className="object-scale-down"
+              className="object-cover rounded-xl"
             />
           </div>
         </div>

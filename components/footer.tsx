@@ -1,143 +1,139 @@
 import Link from "next/link"
 import Image from "next/image"
-import { Facebook, Instagram, Twitter, Linkedin, Mail, Phone, MapPin } from "lucide-react"
+import { Facebook, Instagram, Twitter, Linkedin, Mail, Phone, MapPin, ArrowRight } from "lucide-react"
+import { Button } from "./ui/button"
 
 export function Footer() {
   return (
-    <footer className="bg-gray-100 dark:bg-gray-900">
-      <div className="container mx-auto px-4 py-12">
-        <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-4">
-          <div className="space-y-4">
-            <Link href="/" className="inline-block">
-              <Image
-                src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/icon%204-1scOO5uRlzgf2A0EBzgB8NYQmENW9t.png"
-                alt="IDELEH Logo"
-                width={150}
-                height={60}
-                className="h-12 w-auto"
-              />
+    <footer className="bg-background border-t border-border relative overflow-hidden">
+      {/* Decorative Top Border Glow */}
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-5xl h-[1px] bg-gradient-to-r from-transparent via-primary/30 to-transparent" />
+      {/* Decorative Bottom Mesh Glow */}
+      <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[800px] h-[400px] bg-primary/5 rounded-t-full blur-[100px] pointer-events-none translate-y-1/2" />
+
+      <div className="container mx-auto px-4 py-20 sm:py-24 relative z-10">
+        <div className="grid grid-cols-1 gap-16 md:grid-cols-2 lg:grid-cols-4 lg:gap-12">
+
+          {/* Brand Column */}
+          <div className="space-y-8">
+            <Link href="/" className="inline-block group">
+              <div className="relative h-20 w-48 transition-transform duration-500 group-hover:scale-105">
+                <Image
+                  src="/ideal_logo.png"
+                  alt="IDELEH Logo"
+                  fill
+                  className="object-contain"
+                />
+              </div>
             </Link>
-            <p className="text-sm text-gray-600 dark:text-gray-400">
-              Leading the Future - Ideal Leadership Hub is dedicated to empowering the next generation of leaders
-              through innovative programs and events.
+            <p className="text-foreground/70 leading-relaxed max-w-xs">
+              Leading the Future. We are dedicated to empowering the next generation of leaders through innovative programs, deep mentorship, and strategic events.
             </p>
-            <div className="flex space-x-4">
-              <Link href="#" className="text-gray-600 hover:text-primary dark:text-gray-400">
-                <Facebook className="h-5 w-5" />
-                <span className="sr-only">Facebook</span>
-              </Link>
-              <Link href="#" className="text-gray-600 hover:text-primary dark:text-gray-400">
-                <Instagram className="h-5 w-5" />
-                <span className="sr-only">Instagram</span>
-              </Link>
-              <Link href="#" className="text-gray-600 hover:text-primary dark:text-gray-400">
-                <Twitter className="h-5 w-5" />
-                <span className="sr-only">Twitter</span>
-              </Link>
-              <Link href="#" className="text-gray-600 hover:text-primary dark:text-gray-400">
-                <Linkedin className="h-5 w-5" />
-                <span className="sr-only">LinkedIn</span>
-              </Link>
+            <div className="flex space-x-5">
+              {[
+                { icon: Facebook, label: "Facebook" },
+                { icon: Instagram, label: "Instagram" },
+                { icon: Twitter, label: "Twitter" },
+                { icon: Linkedin, label: "LinkedIn" }
+              ].map((Social, i) => (
+                <Link key={i} href="#" className="flex items-center justify-center w-10 h-10 rounded-full bg-muted text-foreground/70 hover:bg-primary hover:text-primary-foreground transition-all duration-300 hover:-translate-y-1 shadow-sm">
+                  <Social.icon className="h-4 w-4" />
+                  <span className="sr-only">{Social.label}</span>
+                </Link>
+              ))}
             </div>
           </div>
 
-          <div className="space-y-4">
-            <h3 className="text-lg font-semibold">Quick Links</h3>
-            <ul className="space-y-2">
-              <li>
-                <Link href="/" className="text-gray-600 hover:text-primary dark:text-gray-400">
-                  Home
-                </Link>
-              </li>
-              <li>
-                <Link href="/about" className="text-gray-600 hover:text-primary dark:text-gray-400">
-                  About Us
-                </Link>
-              </li>
-              <li>
-                <Link href="/services" className="text-gray-600 hover:text-primary dark:text-gray-400">
-                  Services
-                </Link>
-              </li>
-              <li>
-                <Link href="/projects" className="text-gray-600 hover:text-primary dark:text-gray-400">
-                  Projects
-                </Link>
-              </li>
-              <li>
-                <Link href="/events" className="text-gray-600 hover:text-primary dark:text-gray-400">
-                  Events
-                </Link>
-              </li>
-              <li>
-                <Link href="/team" className="text-gray-600 hover:text-primary dark:text-gray-400">
-                  Our Team
-                </Link>
-              </li>
-              <li>
-                <Link href="/gallery" className="text-gray-600 hover:text-primary dark:text-gray-400">
-                  Gallery
-                </Link>
-              </li>
-              <li>
-                <Link href="/contact" className="text-gray-600 hover:text-primary dark:text-gray-400">
-                  Contact
-                </Link>
-              </li>
+          {/* Quick Links */}
+          <div className="space-y-8">
+            <h3 className="text-xl font-display font-bold text-foreground">Quick Links</h3>
+            <ul className="space-y-4">
+              {[
+                { name: "Home", href: "/" },
+                { name: "About Us", href: "/about" },
+                { name: "Services", href: "/services" },
+                { name: "Projects", href: "/projects" },
+                { name: "Events", href: "/events" },
+                { name: "Our Team", href: "/team" },
+                { name: "Gallery", href: "/gallery" },
+                { name: "Contact", href: "/contact" }
+              ].map((link) => (
+                <li key={link.name}>
+                  <Link href={link.href} className="text-foreground/70 hover:text-primary transition-colors flex items-center group">
+                    <ArrowRight className="h-3 w-3 mr-2 opacity-0 -translate-x-2 transition-all duration-300 group-hover:opacity-100 group-hover:translate-x-0" />
+                    <span>{link.name}</span>
+                  </Link>
+                </li>
+              ))}
             </ul>
           </div>
 
-          <div className="space-y-4">
-            <h3 className="text-lg font-semibold">Contact Us</h3>
-            <ul className="space-y-3">
-              <li className="flex items-start space-x-3">
-                <MapPin className="mt-0.5 h-5 w-5 text-primary" />
+          {/* Contact Info */}
+          <div className="space-y-8">
+            <h3 className="text-xl font-display font-bold text-foreground">Contact Us</h3>
+            <ul className="space-y-6">
+              <li className="flex items-start space-x-4 group">
+                <div className="p-2 rounded-xl bg-primary/10 text-primary group-hover:bg-primary group-hover:text-primary-foreground transition-colors mt-1">
+                  <MapPin className="h-5 w-5" />
+                </div>
                 <div>
-                  <p className="text-gray-600 dark:text-gray-400">
-                    <strong>Abuja:</strong> 1473 Innerblock street Central Business District, Abuja.
+                  <p className="text-foreground/80 leading-relaxed">
+                    <strong className="text-foreground">Abuja:</strong> 1473 Innerblock street CBD, Abuja.
                   </p>
-                  <p className="text-gray-600 dark:text-gray-400">
-                    <strong>Jos:</strong> Greatworks complex Genesis Plaza, Latiya Rayfield.
+                  <p className="text-foreground/80 leading-relaxed mt-2">
+                    <strong className="text-foreground">Jos:</strong> Greatworks complex Genesis Plaza, Latiya.
                   </p>
                 </div>
               </li>
-              <li className="flex items-center space-x-3">
-                <Phone className="h-5 w-5 text-primary" />
-                <span className="text-gray-600 dark:text-gray-400">07048588048</span>
+              <li className="flex items-center space-x-4 group">
+                <div className="p-2 rounded-xl bg-primary/10 text-primary group-hover:bg-primary group-hover:text-primary-foreground transition-colors">
+                  <Phone className="h-5 w-5" />
+                </div>
+                <span className="text-foreground/80 font-medium">07048588048</span>
               </li>
-              <li className="flex items-center space-x-3">
-                <Mail className="h-5 w-5 text-primary" />
-                <span className="text-gray-600 dark:text-gray-400">idealeadhub@gmail.com</span>
+              <li className="flex items-center space-x-4 group">
+                <div className="p-2 rounded-xl bg-primary/10 text-primary group-hover:bg-primary group-hover:text-primary-foreground transition-colors">
+                  <Mail className="h-5 w-5" />
+                </div>
+                <span className="text-foreground/80 font-medium">idealeadhub@gmail.com</span>
               </li>
             </ul>
           </div>
 
-          <div className="space-y-4">
-            <h3 className="text-lg font-semibold">Subscribe</h3>
-            <p className="text-sm text-gray-600 dark:text-gray-400">
-              Subscribe to our newsletter to receive updates on our latest events and programs.
+          {/* Newsletter */}
+          <div className="space-y-8 lg:bg-muted/30 lg:p-8 lg:rounded-3xl border border-transparent lg:border-border/50 relative">
+            <h3 className="text-xl font-display font-bold text-foreground">Subscribe</h3>
+            <p className="text-foreground/70 leading-relaxed">
+              Subscribe to our newsletter to receive cutting-edge insights and updates on our latest programs.
             </p>
-            <form className="space-y-2">
-              <input
-                type="email"
-                placeholder="Your email address"
-                className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-primary focus:outline-none dark:border-gray-700 dark:bg-gray-800"
-                required
-              />
-              <button
+            <form className="space-y-4">
+              <div className="relative">
+                <input
+                  type="email"
+                  placeholder="Your email address"
+                  className="w-full rounded-2xl border border-border bg-background px-5 py-4 text-base focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all outline-none"
+                  required
+                />
+              </div>
+              <Button
                 type="submit"
-                className="w-full rounded-md bg-primary px-3 py-2 text-sm font-medium text-white hover:bg-primary/90 focus:outline-none"
+                className="w-full rounded-2xl py-6 font-bold tracking-wide shadow-md bg-foreground text-background hover:bg-foreground/90 transition-all"
               >
-                Subscribe
-              </button>
+                Join Newsletter
+              </Button>
             </form>
           </div>
         </div>
 
-        <div className="mt-8 border-t border-gray-200 pt-8 dark:border-gray-800">
-          <p className="text-center text-sm text-gray-600 dark:text-gray-400">
+        {/* Copyright */}
+        <div className="mt-20 border-t border-border/50 pt-8 flex flex-col md:flex-row items-center justify-between gap-4">
+          <p className="text-sm text-foreground/60 font-medium">
             © {new Date().getFullYear()} IDELEH - Ideal Leadership Hub. All rights reserved.
           </p>
+          <div className="flex items-center space-x-6">
+            <Link href="#" className="text-sm text-foreground/60 hover:text-primary transition-colors">Privacy Policy</Link>
+            <Link href="#" className="text-sm text-foreground/60 hover:text-primary transition-colors">Terms of Service</Link>
+          </div>
         </div>
       </div>
     </footer>

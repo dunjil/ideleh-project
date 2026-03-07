@@ -22,7 +22,8 @@ export function getImageSrc(imageData: string | null | undefined): string {
     if (
         imageData.startsWith("data:") ||
         imageData.startsWith("http://") ||
-        imageData.startsWith("https://")
+        imageData.startsWith("https://") ||
+        imageData.startsWith("/")
     ) {
         return imageData
     }

@@ -1,63 +1,64 @@
 import Image from "next/image"
-import { query } from "@/lib/db"
+import { api } from "@/lib/api"
 import { getImageSrc } from "@/lib/image-utils"
 
-async function getTeamMembers() {
-  try {
-    const data = await query("SELECT * FROM team_members ORDER BY name ASC")
-    return data.map((m) => ({ id: m.id, name: m.name, position: m.position, bio: m.bio, imageUrl: getImageSrc(m.image_data) }))
-  } catch (e) {
-    console.error("Error in getTeamMembers:", e)
-    return []
-  }
-}
-
-const defaultTeamMembers = [
-  { id: "1", name: "Abel Ajayi", position: "Co-Founder, IDELEH", bio: "Abel is passionate about developing leadership skills in young people.", imageUrl: "/placeholder.svg?height=400&width=300&text=Abel+Ajayi" },
-  { id: "2", name: "Priscilla Asher John", position: "Co-Founder, Executive Director", bio: "Priscilla leads our flagship leadership programs with passion and dedication.", imageUrl: "/placeholder.svg?height=400&width=300&text=Priscilla+Asher+John" },
-  { id: "3", name: "Waltong David Tyoden", position: "Co-Founder, IDELEH", bio: "Waltong builds partnerships with local communities and organizations.", imageUrl: "/placeholder.svg?height=400&width=300&text=Waltong+David+Tyoden" },
-]
-
 export default async function TeamPage() {
-  const teamMembers = await getTeamMembers()
-  const displayTeamMembers = teamMembers.length > 0 ? teamMembers : defaultTeamMembers
+  let teamMembers = []
+
+  try {
+    teamMembers = await api.team.getAll()
+  } catch (error) {
+    console.error("Failed to fetch team members:", error)
+  }
 
   return (
-    <div className="container mx-auto px-4 py-16 md:py-24">
-      <div className="mx-auto max-w-3xl text-center">
-        <h1 className="text-4xl font-bold tracking-tight sm:text-5xl">
-          Our <span className="text-primary">Team</span>
-        </h1>
-        <p className="mt-4 text-lg text-gray-600 dark:text-gray-400">
-          Meet the dedicated professionals behind IDELEH who are passionate about leadership development and community
-          impact.
-        </p>
-      </div>
+    <div className="min-h-screen bg-slate-50/50">
+      {/* Header Section */}
+      <section className="py-24 relative overflow-hidden bg-primary/5">
+        <div className="absolute top-0 right-0 w-1/3 h-full bg-primary/5 -skew-x-12 transform translate-x-1/2" />
+        <div className="container mx-auto px-4 relative z-10 text-center">
+          <span className="text-secondary font-bold tracking-widest uppercase text-sm mb-4 block">The People Behind IDELEH</span>
+          <h1 className="text-5xl md:text-6xl font-display mb-6">
+            Meet Our <span className="text-gradient">Leadership</span>
+          </h1>
+          <p className="max-w-2xl mx-auto text-xl text-muted-foreground">
+            A dedicated team passionate about raising credible leaders for global impact.
+          </p>
+        </div>
+      </section>
 
-      <div className="mt-16 grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
-        {displayTeamMembers.map((member) => (
-          <div
-            key={member.id}
-            className="overflow-hidden rounded-lg bg-white shadow-md transition-all hover:shadow-lg dark:bg-gray-800"
-          >
-            <div className="relative h-64 w-full">
-              <Image
-                src={
-                  member.imageUrl || `/placeholder.svg?height=400&width=300&text=${encodeURIComponent(member.name)}`
-                }
-                alt={member.name}
-                fill
-                className="object-cover"
-              />
-            </div>
-            <div className="p-5">
-              <h3 className="text-xl font-bold">{member.name}</h3>
-              <p className="mb-3 text-primary">{member.position}</p>
-              {member.bio && <p className="text-gray-600 dark:text-gray-400">{member.bio}</p>}
-            </div>
+      {/* Team Grid */}
+      <section className="py-24">
+        <div className="container mx-auto px-4">
+          <div className="grid gap-12 sm:grid-cols-2 lg:grid-cols-3">
+            {teamMembers.map((member: any) => (
+              <div
+                key={member.id}
+                className="glass p-4 rounded-[2rem] hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-2 group"
+              >
+                <div className="relative h-[400px] w-full overflow-hidden rounded-2xl mb-8">
+                  <Image
+                    src={getImageSrc(member.image_data)}
+                    alt={member.name}
+                    fill
+                    className="object-cover transition-transform duration-700 group-hover:scale-110"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-primary/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                </div>
+                <div className="px-4 pb-4">
+                  <h3 className="text-2xl font-bold mb-2">{member.name}</h3>
+                  <p className="text-secondary font-semibold mb-6">{member.position}</p>
+                  {member.bio && (
+                    <p className="text-muted-foreground leading-relaxed line-clamp-3 group-hover:line-clamp-none transition-all duration-500">
+                      {member.bio}
+                    </p>
+                  )}
+                </div>
+              </div>
+            ))}
           </div>
-        ))}
-      </div>
+        </div>
+      </section>
     </div>
   )
 }

@@ -1,10 +1,10 @@
 import Image from "next/image"
-import { query } from "@/lib/db"
+import { api } from "@/lib/api"
 import { getImageSrc } from "@/lib/image-utils"
 
 async function getRandomGalleryImage() {
   try {
-    const data = await query("SELECT image_data FROM gallery LIMIT 10")
+    const data = await api.gallery.getAll()
     if (!data.length) return null
     const random = data[Math.floor(Math.random() * data.length)]
     return getImageSrc(random.image_data)
@@ -28,7 +28,7 @@ export default async function AboutPage() {
       <div className="mt-16 grid gap-12 md:grid-cols-2 md:items-center">
         <div className="relative h-[400px] overflow-hidden rounded-lg shadow-xl">
           <Image
-            src={randomGalleryImage || "/placeholder.svg?height=800&width=600"}
+            src={randomGalleryImage || encodeURI("/images/Nation Building Conference University of Jos, 2024/IMG-20240627-WA0147.jpg")}
             alt="About IDELEH"
             fill
             className="object-cover"

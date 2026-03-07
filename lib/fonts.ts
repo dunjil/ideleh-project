@@ -1,8 +1,13 @@
-import { Inter } from "next/font/google"
+import { Outfit, Plus_Jakarta_Sans } from "next/font/google"
 
-const inter = Inter({
+const fontSans = Plus_Jakarta_Sans({
   subsets: ["latin"],
   variable: "--font-sans",
 })
 
-export const fontSans = inter
+const fontDisplay = Outfit({
+  subsets: ["latin"],
+  variable: "--font-display",
+})
+
+export { fontSans, fontDisplay }

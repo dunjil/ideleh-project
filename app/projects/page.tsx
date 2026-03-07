@@ -1,13 +1,13 @@
 import Image from "next/image"
 import { Button } from "@/components/ui/button"
 import Link from "next/link"
-import { query } from "@/lib/db"
+import { api } from "@/lib/api"
 import { getImageSrc } from "@/lib/image-utils"
 
 async function getProjects() {
   try {
-    const data = await query("SELECT * FROM projects ORDER BY display_order ASC")
-    return data.map((p) => ({ id: p.id, title: p.title, description: p.description, imageUrl: getImageSrc(p.image_data) }))
+    const data = await api.projects.getAll()
+    return data.map((p: any) => ({ id: p.id, title: p.title, description: p.description, imageUrl: getImageSrc(p.image_data) }))
   } catch (e) {
     console.error("Error in getProjects:", e)
     return []
@@ -31,7 +31,7 @@ export default async function ProjectsPage() {
         </div>
 
         <div className="mt-16 space-y-24">
-          {projects.map((project, index) => (
+          {projects.map((project: any, index: number) => (
             <div key={project.id} className="grid gap-12 md:grid-cols-2 md:items-center">
               <div className={`order-2 ${index % 2 === 0 ? "md:order-1" : "md:order-2"}`}>
                 <h2 className="text-3xl font-bold">{project.title}</h2>
@@ -49,8 +49,12 @@ export default async function ProjectsPage() {
               >
                 <Image
                   src={
-                    project.imageUrl ||
-                    `/placeholder.svg?height=800&width=600&text=${encodeURIComponent(project.title) || "/placeholder.svg"}`
+                    project.imageUrl !== "/placeholder.svg" ? project.imageUrl : (
+                      project.title === "LeaderZ Conferences" ? encodeURI("/images/Nation Building Conference University of Jos, 2024/IMG-20240627-WA0011.jpg") :
+                        project.title === "Nation Building Conferences" ? encodeURI("/images/Nation Building Conference University of Jos, 2024/IMG-20240627-WA0039.jpg") :
+                          project.title === "Mentorship Hub" ? encodeURI("/images/Nation Building Conference, Federal College of Education Pankshin 2024/_BIL4893.jpg") :
+                            encodeURI("/images/Nation Building Conference University of Jos, 2024/IMG-20240627-WA0011.jpg")
+                    )
                   }
                   alt={project.title}
                   fill
@@ -111,7 +115,7 @@ export default async function ProjectsPage() {
           </div>
           <div className="relative h-[400px] overflow-hidden rounded-lg shadow-xl order-1 md:order-2">
             <Image
-              src="/placeholder.svg?height=800&width=600&text=LeaderZ+Conferences"
+              src={encodeURI("/images/Nation Building Conference University of Jos, 2024/IMG-20240627-WA0011.jpg")}
               alt="LeaderZ Conferences"
               fill
               className="object-cover"
@@ -123,7 +127,7 @@ export default async function ProjectsPage() {
         <div className="grid gap-12 md:grid-cols-2 md:items-center">
           <div className="relative h-[400px] overflow-hidden rounded-lg shadow-xl">
             <Image
-              src="/placeholder.svg?height=800&width=600&text=Nation+Building+Conferences"
+              src={encodeURI("/images/Nation Building Conference University of Jos, 2024/IMG-20240627-WA0039.jpg")}
               alt="Nation Building Conferences"
               fill
               className="object-cover"
@@ -185,7 +189,7 @@ export default async function ProjectsPage() {
           </div>
           <div className="relative h-[400px] overflow-hidden rounded-lg shadow-xl order-1 md:order-2">
             <Image
-              src="/placeholder.svg?height=800&width=600&text=Mentorship+Hub"
+              src={encodeURI("/images/Nation Building Conference, Federal College of Education Pankshin 2024/_BIL4893.jpg")}
               alt="Mentorship Hub"
               fill
               className="object-cover"
