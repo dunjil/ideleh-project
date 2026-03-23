@@ -2,13 +2,13 @@ import { Button } from "@/components/ui/button"
 import Link from "next/link"
 import Image from "next/image"
 import { Calendar, MapPin } from "lucide-react"
-import { query } from "@/lib/db"
+import { api } from "@/lib/api"
 import { getImageSrc } from "@/lib/image-utils"
 
 async function getEvents() {
   try {
-    const data = await query("SELECT * FROM events ORDER BY event_date DESC")
-    return data.map((event) => ({ ...event, imageUrl: getImageSrc(event.image_data) }))
+    const data = await api.events.getAll()
+    return data.map((event: any) => ({ ...event, imageUrl: getImageSrc(event.image_data) }))
   } catch (e) {
     console.error("Error fetching events:", e)
     return []

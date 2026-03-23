@@ -3,7 +3,7 @@ import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { Calendar, Clock, MapPin } from "lucide-react"
 import { formatDate } from "@/lib/utils"
-import { query } from "@/lib/db"
+import { api } from "@/lib/api"
 import { getImageSrc } from "@/lib/image-utils"
 import { notFound } from "next/navigation"
 
@@ -13,8 +13,7 @@ interface EventPageProps {
 
 async function getEvent(id: string) {
   try {
-    const [row] = await query("SELECT * FROM events WHERE id = $1", [id])
-    return row || null
+    return await api.events.getOne(id)
   } catch (e) {
     console.error("Error fetching event:", e)
     return null
