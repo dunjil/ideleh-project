@@ -2,7 +2,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from database import init_db
 from models.models import User, HeroImage, SiteContent, Event, Registration, Gallery, Project, TeamMember
-from routes import events, projects, team, gallery, site_content, hero_images
+from routes import events, projects, team, gallery, site_content, hero_images, contacts
 
 app = FastAPI(title="IDELEH API")
 
@@ -27,3 +27,4 @@ app.include_router(projects.router, prefix="/api/projects", tags=["projects"])
 app.include_router(team.router, prefix="/api/team", tags=["team"])
 app.include_router(gallery.router, prefix="/api/gallery", tags=["gallery"])
 app.include_router(site_content.router, prefix="/api/content", tags=["content"])
+app.include_router(contacts.router, prefix="/api/contacts", tags=["contacts"])

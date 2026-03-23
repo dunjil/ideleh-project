@@ -9,6 +9,7 @@ DATABASE_URL = os.getenv("DATABASE_URL", "postgresql://postgres:postgres@localho
 engine = create_engine(DATABASE_URL)
 
 def init_db():
+    from models.models import User, HeroImage, SiteContent, Event, Registration, Gallery, TeamMember, Project
     SQLModel.metadata.create_all(engine)
 
 def get_session():

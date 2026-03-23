@@ -25,7 +25,7 @@ export function getImageSrc(imageData: string | null | undefined): string {
         imageData.startsWith("https://") ||
         imageData.startsWith("/")
     ) {
-        return imageData
+        return encodeURI(imageData)
     }
     return "/placeholder.svg"
 }

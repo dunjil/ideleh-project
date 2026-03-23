@@ -4,6 +4,7 @@ import { useState, useEffect } from "react"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { downloadCSV } from "@/lib/utils"
+import { api } from "@/lib/api"
 
 interface RegistrationsPageProps {
   params: {
@@ -19,12 +20,10 @@ export default function RegistrationsPage({ params }: RegistrationsPageProps) {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const [eventRes, regRes] = await Promise.all([
-          fetch(`/api/admin/events/${params.id}`),
-          fetch(`/api/admin/events/${params.id}/registrations`),
+        const [eventData, regData] = await Promise.all([
+          api.events.getOne(params.id),
+          api.events.getRegistrations(params.id)
         ])
-        const eventData = await eventRes.json()
-        const regData = await regRes.json()
         setEvent(eventData)
         setRegistrations(Array.isArray(regData) ? regData : [])
       } catch (error) {

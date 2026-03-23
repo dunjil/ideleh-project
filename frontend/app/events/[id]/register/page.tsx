@@ -11,6 +11,7 @@ import { Label } from "@/components/ui/label"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { Textarea } from "@/components/ui/textarea"
 import { useToast } from "@/components/ui/use-toast"
+import { api } from "@/lib/api"
 
 interface RegistrationPageProps {
   params: {
@@ -44,12 +45,7 @@ export default function RegistrationPage({ params }: RegistrationPageProps) {
     e.preventDefault()
     setIsSubmitting(true)
     try {
-      const res = await fetch(`/api/admin/events/${params.id}/registrations`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ event_id: params.id, ...formData }),
-      })
-      if (!res.ok) throw new Error((await res.json()).error)
+      await api.events.register(params.id, formData)
       toast({ title: "Registration Successful", description: "You have successfully registered for this event." })
       router.push(`/events/${params.id}/confirmation`)
     } catch (error: any) {

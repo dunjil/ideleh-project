@@ -181,11 +181,7 @@ export default async function ProjectsPage() {
                 potential.
               </p>
             </div>
-            <div className="mt-6">
-              <Button asChild>
-                <Link href="/contact">Inquire About Mentorship</Link>
-              </Button>
-            </div>
+
           </div>
           <div className="relative h-[400px] overflow-hidden rounded-lg shadow-xl order-1 md:order-2">
             <Image

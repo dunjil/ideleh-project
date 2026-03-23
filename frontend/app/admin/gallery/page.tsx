@@ -10,6 +10,7 @@ import { useToast } from "@/components/ui/use-toast"
 import { Trash2, Upload } from "lucide-react"
 import { fileToBase64, getImageSrc } from "@/lib/image-utils"
 import Link from "next/link"
+import { api } from "@/lib/api"
 
 export default function AdminGalleryPage() {
   const { toast } = useToast()
@@ -19,13 +20,13 @@ export default function AdminGalleryPage() {
   const [newImage, setNewImage] = useState<File | null>(null)
   const [imagePreview, setImagePreview] = useState<string | null>(null)
   const [imageTitle, setImageTitle] = useState("")
+  const [meetingName, setMeetingName] = useState("")
 
   useEffect(() => { fetchGalleryImages() }, [])
 
   const fetchGalleryImages = async () => {
     try {
-      const res = await fetch("/api/admin/gallery")
-      const data = await res.json()
+      const data = await api.gallery.getAll()
       setGalleryImages(data.map((item: any) => ({ ...item, imageUrl: getImageSrc(item.image_data) })))
     } catch (e) {
       toast({ title: "Error", description: "Failed to load gallery images.", variant: "destructive" })
@@ -53,16 +54,12 @@ export default function AdminGalleryPage() {
     setIsSubmitting(true)
     try {
       const image_data = await fileToBase64(newImage)
-      const res = await fetch("/api/admin/gallery", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ title: imageTitle || "Gallery Image", image_data }),
-      })
-      if (!res.ok) throw new Error((await res.json()).error)
+      await api.gallery.create({ title: imageTitle || "Gallery Image", meeting_name: meetingName || "General", image_data })
       toast({ title: "Image Added", description: "The image has been added to the gallery." })
       setNewImage(null)
       setImagePreview(null)
       setImageTitle("")
+      setMeetingName("")
       fetchGalleryImages()
     } catch (error: any) {
       toast({ title: "Error", description: error.message || "Failed to add image.", variant: "destructive" })
@@ -74,8 +71,7 @@ export default function AdminGalleryPage() {
   const handleDeleteImage = async (id: string) => {
     if (!confirm("Are you sure you want to delete this image?")) return
     try {
-      const res = await fetch(`/api/admin/gallery/${id}`, { method: "DELETE" })
-      if (!res.ok) throw new Error((await res.json()).error)
+      await api.gallery.delete(id)
       toast({ title: "Image Deleted", description: "The image has been deleted." })
       setGalleryImages(galleryImages.filter((img) => img.id !== id))
     } catch (error: any) {
@@ -104,6 +100,10 @@ export default function AdminGalleryPage() {
             <Input id="title" value={imageTitle} onChange={(e) => setImageTitle(e.target.value)} placeholder="Enter image title" />
           </div>
           <div className="space-y-2">
+            <Label htmlFor="meeting_name">Meeting / Conference Name</Label>
+            <Input id="meeting_name" value={meetingName} onChange={(e) => setMeetingName(e.target.value)} placeholder="e.g., Abuja Prefects Conference, 2023" />
+          </div>
+          <div className="space-y-2">
             <Label htmlFor="image">Image</Label>
             <Input id="image" type="file" accept="image/*" onChange={handleImageChange} required />
             {imagePreview && (
@@ -129,7 +129,8 @@ export default function AdminGalleryPage() {
                   <Image src={item.imageUrl || "/placeholder.svg"} alt={item.title} fill className="object-cover" />
                 </div>
                 <div className="absolute inset-0 flex flex-col items-center justify-center bg-black/70 opacity-0 transition-opacity duration-200 group-hover:opacity-100">
-                  <p className="mb-2 text-center text-white">{item.title}</p>
+                  <p className="mb-1 text-center font-bold text-white">{item.title}</p>
+                  <p className="mb-2 text-center text-xs text-white/80">{item.meeting_name || "General"}</p>
                   <Button variant="destructive" size="sm" onClick={() => handleDeleteImage(item.id)}>
                     <Trash2 className="mr-1 h-4 w-4" />Delete
                   </Button>

@@ -43,6 +43,11 @@ export const api = {
     events: {
         getAll: () => fetcher("/events?populate=*"),
         getOne: (id: string | number) => fetcher(`/events/${id}?populate=*`),
+        create: (data: any) => fetch(`${API_URL}/events/`, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(data) }).then(r => { if (!r.ok) throw new Error(r.statusText); return r.json() }),
+        update: (id: string | number, data: any) => fetch(`${API_URL}/events/${id}`, { method: "PATCH", headers: { "Content-Type": "application/json" }, body: JSON.stringify(data) }).then(r => { if (!r.ok) throw new Error(r.statusText); return r.json() }),
+        delete: (id: string | number) => fetch(`${API_URL}/events/${id}`, { method: "DELETE" }).then(r => { if (!r.ok) throw new Error(r.statusText); return r.json() }),
+        getRegistrations: (id: string | number) => fetcher(`/events/${id}/registrations`),
+        register: (id: string | number, data: any) => fetch(`${API_URL}/events/${id}/registrations`, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(data) }).then(r => { if (!r.ok) throw new Error(r.statusText); return r.json() }),
     },
     projects: {
         getAll: () => fetcher("/projects?populate=*"),
@@ -52,9 +57,14 @@ export const api = {
     },
     gallery: {
         getAll: () => fetcher("/galleries?populate=*"),
+        create: (data: any) => fetch(`${API_URL}/gallery/`, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(data) }).then(r => { if (!r.ok) throw new Error(r.statusText); return r.json() }),
+        delete: (id: string | number) => fetch(`${API_URL}/gallery/${id}`, { method: "DELETE" }).then(r => { if (!r.ok) throw new Error(r.statusText); return r.json() }),
     },
     content: {
         get: (key: string) => fetcher(`/site-contents?filters[key][$eq]=${key}&populate=*`, true),
+    },
+    contacts: {
+        getAll: () => fetcher("/contacts/"),
     },
     hero: {
         getAll: () => fetcher("/hero-images?populate=*"),

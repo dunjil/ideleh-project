@@ -12,7 +12,7 @@ export function Footer() {
       <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[800px] h-[400px] bg-primary/5 rounded-t-full blur-[100px] pointer-events-none translate-y-1/2" />
 
       <div className="container mx-auto px-4 py-20 sm:py-24 relative z-10">
-        <div className="grid grid-cols-1 gap-16 md:grid-cols-2 lg:grid-cols-4 lg:gap-12">
+        <div className="grid grid-cols-1 gap-16 md:grid-cols-2 lg:grid-cols-3 lg:gap-12">
 
           {/* Brand Column */}
           <div className="space-y-8">
@@ -56,7 +56,6 @@ export function Footer() {
                 { name: "Events", href: "/events" },
                 { name: "Our Team", href: "/team" },
                 { name: "Gallery", href: "/gallery" },
-                { name: "Contact", href: "/contact" }
               ].map((link) => (
                 <li key={link.name}>
                   <Link href={link.href} className="text-foreground/70 hover:text-primary transition-colors flex items-center group">
@@ -98,30 +97,6 @@ export function Footer() {
                 <span className="text-foreground/80 font-medium">idealeadhub@gmail.com</span>
               </li>
             </ul>
-          </div>
-
-          {/* Newsletter */}
-          <div className="space-y-8 lg:bg-muted/30 lg:p-8 lg:rounded-3xl border border-transparent lg:border-border/50 relative">
-            <h3 className="text-xl font-display font-bold text-foreground">Subscribe</h3>
-            <p className="text-foreground/70 leading-relaxed">
-              Subscribe to our newsletter to receive cutting-edge insights and updates on our latest programs.
-            </p>
-            <form className="space-y-4">
-              <div className="relative">
-                <input
-                  type="email"
-                  placeholder="Your email address"
-                  className="w-full rounded-2xl border border-border bg-background px-5 py-4 text-base focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all outline-none"
-                  required
-                />
-              </div>
-              <Button
-                type="submit"
-                className="w-full rounded-2xl py-6 font-bold tracking-wide shadow-md bg-foreground text-background hover:bg-foreground/90 transition-all"
-              >
-                Join Newsletter
-              </Button>
-            </form>
           </div>
         </div>
 

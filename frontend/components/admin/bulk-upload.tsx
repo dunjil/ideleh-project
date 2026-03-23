@@ -9,6 +9,7 @@ import { Label } from "@/components/ui/label"
 import { Progress } from "@/components/ui/progress"
 import { useToast } from "@/components/ui/use-toast"
 import { fileToBase64 } from "@/lib/image-utils"
+import { api } from "@/lib/api"
 import { X, Upload } from "lucide-react"
 
 interface BulkUploadProps {
@@ -18,6 +19,7 @@ interface BulkUploadProps {
   description?: string
   maxFiles?: number
   acceptedFileTypes?: string
+  additionalData?: Record<string, any>
 }
 
 export function BulkUpload({
@@ -27,6 +29,7 @@ export function BulkUpload({
   description = "Upload multiple files at once",
   maxFiles = 20,
   acceptedFileTypes = "image/*",
+  additionalData = {},
 }: BulkUploadProps) {
   const [files, setFiles] = useState<File[]>([])
   const [previews, setPreviews] = useState<string[]>([])
@@ -83,12 +86,8 @@ export function BulkUpload({
         try {
           const image_data = await fileToBase64(files[i])
           const title = files[i].name.split(".")[0].replace(/-/g, " ")
-          const res = await fetch("/api/admin/gallery", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ title, image_data }),
-          })
-          if (res.ok) { succeeded++ } else { failed++ }
+          await api.gallery.create({ title, image_data, ...additionalData })
+          succeeded++
         } catch { failed++ }
         setProgress(Math.round(((i + 1) / files.length) * 100))
         setUploadedCount(succeeded)

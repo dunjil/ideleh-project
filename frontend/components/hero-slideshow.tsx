@@ -77,7 +77,7 @@ export function HeroSlideshow({
 
   return (
     <div
-      className={cn("relative min-h-[85vh] flex flex-col lg:flex-row items-center bg-gray-50/50 overflow-hidden", className)}
+      className={cn("relative min-h-[85vh] flex flex-col lg:flex-row items-center bg-background/50 overflow-hidden", className)}
       onMouseEnter={() => setIsHovering(true)}
       onMouseLeave={() => setIsHovering(false)}
     >
@@ -94,11 +94,11 @@ export function HeroSlideshow({
             )}
           >
             <div className="max-w-xl space-y-8 pt-12 lg:pt-0">
-              <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-display font-bold leading-[1.1] tracking-tight text-black">
+              <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-display font-bold leading-[1.1] tracking-tight text-foreground">
                 {image.title}
               </h1>
               {image.description && (
-                <p className="text-lg md:text-xl text-gray-700 font-medium leading-relaxed">
+                <p className="text-lg md:text-xl text-muted-foreground font-medium leading-relaxed">
                   {image.description}
                 </p>
               )}
@@ -109,7 +109,7 @@ export function HeroSlideshow({
                     <Button
                       asChild
                       size="lg"
-                      className="px-8 py-6 text-lg bg-primary text-white hover:bg-primary/90 transition-all rounded-md shadow-sm xl:shadow-md"
+                      className="px-8 py-6 text-lg bg-primary text-primary-foreground hover:bg-primary/90 transition-all rounded-md shadow-sm xl:shadow-md"
                     >
                       <Link href={image.ctaLink || "#"}>
                         {image.ctaText}
@@ -121,7 +121,7 @@ export function HeroSlideshow({
                       asChild
                       variant="outline"
                       size="lg"
-                      className="px-8 py-6 text-lg transition-all border-gray-300 text-black hover:bg-gray-100 hover:text-black rounded-md"
+                      className="px-8 py-6 text-lg transition-all border-border text-foreground hover:bg-accent hover:text-accent-foreground rounded-md"
                     >
                       <Link href={image.secondaryCtaLink || "#"}>
                         {image.secondaryCtaText}
@@ -140,7 +140,7 @@ export function HeroSlideshow({
             <Button
               variant="outline"
               size="icon"
-              className="h-12 w-12 rounded-md border-gray-200 bg-white text-black hover:bg-gray-50 hover:text-primary transition-all shadow-sm"
+              className="h-12 w-12 rounded-md border-border bg-background text-foreground hover:bg-accent hover:text-accent-foreground transition-all shadow-sm"
               onClick={goToPrevious}
               aria-label="Previous slide"
             >
@@ -149,7 +149,7 @@ export function HeroSlideshow({
             <Button
               variant="outline"
               size="icon"
-              className="h-12 w-12 rounded-md border-gray-200 bg-white text-black hover:bg-gray-50 hover:text-primary transition-all shadow-sm"
+              className="h-12 w-12 rounded-md border-border bg-background text-foreground hover:bg-accent hover:text-accent-foreground transition-all shadow-sm"
               onClick={goToNext}
               aria-label="Next slide"
             >

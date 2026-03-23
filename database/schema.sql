@@ -90,10 +90,11 @@ CREATE TABLE IF NOT EXISTS registrations (
 -- ── Gallery ───────────────────────────────────────────────────────────────────
 
 CREATE TABLE IF NOT EXISTS gallery (
-  id         UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-  title      TEXT NOT NULL,
-  image_data TEXT,             -- base64 data URI
-  created_at TIMESTAMPTZ DEFAULT NOW()
+  id           UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  title        TEXT NOT NULL,
+  meeting_name TEXT,             -- The meeting/conference this image belongs to
+  image_data   TEXT,             -- base64 data URI or path
+  created_at   TIMESTAMPTZ DEFAULT NOW()
 );
 
 -- ── Team members ──────────────────────────────────────────────────────────────

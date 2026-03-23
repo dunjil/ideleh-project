@@ -26,6 +26,6 @@ def run_sql_file(filename):
 
 if __name__ == "__main__":
     # Ensure tables from schema.sql exist
-    run_sql_file("schema.sql")
+    run_sql_file("database/schema.sql")
     # run_sql_file("seed-data.sql")
     print("Database initialization complete.")

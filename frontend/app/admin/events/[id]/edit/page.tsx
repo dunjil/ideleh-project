@@ -10,6 +10,7 @@ import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import { useToast } from "@/components/ui/use-toast"
 import { fileToBase64, getImageSrc } from "@/lib/image-utils"
+import { api } from "@/lib/api"
 
 interface EditEventPageProps {
   params: { id: string }
@@ -27,9 +28,7 @@ export default function EditEventPage({ params }: EditEventPageProps) {
   useEffect(() => {
     const fetchEvent = async () => {
       try {
-        const res = await fetch(`/api/admin/events/${params.id}`)
-        if (!res.ok) throw new Error("Failed to fetch event")
-        const data = await res.json()
+        const data = await api.events.getOne(params.id)
         const formattedDate = new Date(data.event_date).toISOString().slice(0, 16)
         setFormData({ title: data.title, description: data.description, event_date: formattedDate })
         setImagePreview(getImageSrc(data.image_data))
@@ -63,12 +62,7 @@ export default function EditEventPage({ params }: EditEventPageProps) {
     try {
       const body: any = { ...formData }
       if (imageFile) body.image_data = await fileToBase64(imageFile)
-      const res = await fetch(`/api/admin/events/${params.id}`, {
-        method: "PATCH",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(body),
-      })
-      if (!res.ok) throw new Error((await res.json()).error)
+      await api.events.update(params.id, body)
       toast({ title: "Event Updated", description: "The event has been updated successfully." })
       router.push("/admin/events")
     } catch (error: any) {
@@ -81,8 +75,7 @@ export default function EditEventPage({ params }: EditEventPageProps) {
   const handleDelete = async () => {
     if (!confirm("Are you sure you want to delete this event? This action cannot be undone.")) return
     try {
-      const res = await fetch(`/api/admin/events/${params.id}`, { method: "DELETE" })
-      if (!res.ok) throw new Error((await res.json()).error)
+      await api.events.delete(params.id)
       toast({ title: "Event Deleted", description: "The event has been deleted successfully." })
       router.push("/admin/events")
     } catch (error: any) {

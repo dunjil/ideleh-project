@@ -44,6 +44,8 @@ class Registration(SQLModel, table=True):
     first_name: str
     last_name: str
     gender: str
+    country: str = Field(default="Nigeria")
+    city: str = Field(default="")
     expectation: Optional[str] = None
     email: str
     phone: str
@@ -53,6 +55,7 @@ class Gallery(SQLModel, table=True):
     __tablename__ = "gallery"
     id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True)
     title: str
+    meeting_name: Optional[str] = None
     image_data: Optional[str] = None
     created_at: datetime = Field(default_factory=datetime.utcnow)
 
@@ -72,4 +75,5 @@ class Project(SQLModel, table=True):
     description: str
     image_data: Optional[str] = None
     is_featured: bool = Field(default=False)
+    display_order: int = Field(default=0)
     created_at: datetime = Field(default_factory=datetime.utcnow)

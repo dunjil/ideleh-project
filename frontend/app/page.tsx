@@ -255,7 +255,7 @@ export default async function Home() {
                     <Image src={getImageSrc(member.image_data) || "/placeholder.svg"} alt={member.name} fill className="object-cover" />
                   </div>
                   <h3 className="text-3xl font-display font-bold mb-2">{member.name}</h3>
-                  <p className="text-primary font-bold uppercase tracking-widest text-sm mb-4">{member.role}</p>
+                  <p className="text-secondary font-bold uppercase tracking-widest text-sm mb-4">{member.position}</p>
                   <div className="max-w-sm">
                     <p className="text-foreground/60 leading-relaxed line-clamp-2">{member.bio}</p>
                   </div>
@@ -286,67 +286,7 @@ export default async function Home() {
         </div>
       </section>
 
-      {/* Contact Section */}
-      <section className="py-32 bg-background relative overflow-hidden">
-        <div className="absolute top-0 right-1/4 w-[400px] h-[400px] bg-primary/5 rounded-full blur-[100px] pointer-events-none" />
-        <div className="container mx-auto px-4 relative z-10">
-          <div className="max-w-7xl mx-auto">
-            <div className="grid gap-20 lg:grid-cols-2 lg:gap-16 items-center">
-              <div>
-                <ScrollReveal>
-                  <h2 className="text-4xl md:text-7xl font-display mb-8 text-foreground leading-tight">Let's <span className="text-primary italic">Connect</span></h2>
-                  <p className="text-xl text-foreground/70 mb-16 leading-relaxed max-w-lg">Whether you have questions or want to partner with us, we'd love to hear from you.</p>
-                  <div className="space-y-10">
-                    <div className="flex items-start space-x-6 group">
-                      <div className="bg-primary/10 p-5 rounded-2xl group-hover:bg-primary/20 transition-colors"><MapPin className="h-8 w-8 text-primary" /></div>
-                      <div>
-                        <h3 className="font-bold text-2xl mb-3 font-display">Our Locations</h3>
-                        <p className="text-foreground/70 leading-relaxed text-lg"><strong>Abuja:</strong> 1473 Innerblock street CBD, Abuja.</p>
-                        <p className="text-foreground/70 leading-relaxed text-lg"><strong>Jos:</strong> Greatworks complex Genesis Plaza, Latiya Rayfield.</p>
-                      </div>
-                    </div>
-                    <div className="flex items-center space-x-6 group">
-                      <div className="bg-primary/10 p-5 rounded-2xl group-hover:bg-primary/20 transition-colors"><Mail className="h-8 w-8 text-primary" /></div>
-                      <div>
-                        <h3 className="font-bold text-2xl font-display mb-2">Email us</h3>
-                        <p className="text-foreground/70 text-lg">idealeadhub@gmail.com</p>
-                      </div>
-                    </div>
-                    <div className="flex items-center space-x-6 group">
-                      <div className="bg-secondary/10 p-5 rounded-2xl group-hover:bg-secondary/20 transition-colors"><Phone className="h-8 w-8 text-secondary" /></div>
-                      <div>
-                        <h3 className="font-bold text-2xl font-display mb-2">Call us</h3>
-                        <p className="text-foreground/70 text-lg">07048588048</p>
-                      </div>
-                    </div>
-                  </div>
-                </ScrollReveal>
-              </div>
-              <ScrollReveal delay={0.3}>
-                <div className="glass-card rounded-[2rem] p-10 lg:p-12 shadow-2xl relative">
-                  <form className="space-y-8">
-                    <div className="grid gap-8 sm:grid-cols-2">
-                      <div className="space-y-3">
-                        <label htmlFor="name" className="text-sm font-bold tracking-wide uppercase text-foreground/70 ml-2">Full Name</label>
-                        <input type="text" id="name" className="w-full rounded-2xl bg-muted/50 border border-border px-6 py-4 text-lg focus:ring-2 focus:ring-primary focus:border-primary transition-all outline-none" placeholder="John Doe" />
-                      </div>
-                      <div className="space-y-3">
-                        <label htmlFor="email" className="text-sm font-bold tracking-wide uppercase text-foreground/70 ml-2">Email Address</label>
-                        <input type="email" id="email" className="w-full rounded-2xl bg-muted/50 border border-border px-6 py-4 text-lg focus:ring-2 focus:ring-primary focus:border-primary transition-all outline-none" placeholder="john@example.com" />
-                      </div>
-                    </div>
-                    <div className="space-y-3">
-                      <label htmlFor="message" className="text-sm font-bold tracking-wide uppercase text-foreground/70 ml-2">Your Message</label>
-                      <textarea id="message" rows={6} className="w-full rounded-2xl bg-muted/50 border border-border px-6 py-4 text-lg focus:ring-2 focus:ring-primary focus:border-primary transition-all outline-none resize-none" placeholder="How can we help you become a better leader?"></textarea>
-                    </div>
-                    <Button type="submit" size="lg" className="w-full py-8 text-xl font-bold rounded-2xl shadow-lg bg-primary hover:bg-primary/90 text-white transition-all">Send Message</Button>
-                  </form>
-                </div>
-              </ScrollReveal>
-            </div>
-          </div>
-        </div>
-      </section>
+
     </div>
   )
 }

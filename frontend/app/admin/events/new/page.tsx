@@ -10,6 +10,7 @@ import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import { useToast } from "@/components/ui/use-toast"
 import { fileToBase64 } from "@/lib/image-utils"
+import { api } from "@/lib/api"
 
 export default function NewEventPage() {
   const router = useRouter()
@@ -43,12 +44,7 @@ export default function NewEventPage() {
     setIsSubmitting(true)
     try {
       const image_data = await fileToBase64(imageFile)
-      const res = await fetch("/api/admin/events", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ ...formData, image_data }),
-      })
-      if (!res.ok) throw new Error((await res.json()).error)
+      await api.events.create({ ...formData, image_data })
       toast({ title: "Event Created", description: "The event has been created successfully." })
       router.push("/admin/events")
     } catch (error: any) {
