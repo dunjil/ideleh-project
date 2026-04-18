@@ -1,17 +1,29 @@
 import { NextResponse } from "next/server"
-import { query } from "@/lib/db"
+
+const STRAPI_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:1337/api"
+
+function strapiHeaders(extra: Record<string, string> = {}): Record<string, string> {
+    return extra
+}
 
 export async function PATCH(request: Request, { params }: { params: { id: string } }) {
     try {
         const body = await request.json()
-        const row = await query(
-            `UPDATE hero_images SET
-        is_active = COALESCE($1, is_active),
-        display_order = COALESCE($2, display_order)
-       WHERE id = $3 RETURNING *`,
-            [body.is_active ?? null, body.display_order ?? null, params.id],
-        )
-        return NextResponse.json(row[0])
+        const data: Record<string, unknown> = {}
+        if (body.is_active !== undefined) data.is_active = body.is_active
+        if (body.display_order !== undefined) data.display_order = body.display_order
+
+        const res = await fetch(`${STRAPI_URL}/hero-images/${params.id}`, {
+            method: "PUT",
+            headers: strapiHeaders({ "Content-Type": "application/json" }),
+            body: JSON.stringify({ data }),
+        })
+        if (!res.ok) {
+            const err = await res.json()
+            throw new Error(err.error?.message || res.statusText)
+        }
+        const json = await res.json()
+        return NextResponse.json(json.data)
     } catch (e: any) {
         return NextResponse.json({ error: e.message }, { status: 500 })
     }
@@ -19,7 +31,14 @@ export async function PATCH(request: Request, { params }: { params: { id: string
 
 export async function DELETE(_req: Request, { params }: { params: { id: string } }) {
     try {
-        await query("DELETE FROM hero_images WHERE id = $1", [params.id])
+        const res = await fetch(`${STRAPI_URL}/hero-images/${params.id}`, {
+            method: "DELETE",
+            headers: strapiHeaders(),
+        })
+        if (!res.ok) {
+            const err = await res.json()
+            throw new Error(err.error?.message || res.statusText)
+        }
         return NextResponse.json({ success: true })
     } catch (e: any) {
         return NextResponse.json({ error: e.message }, { status: 500 })
