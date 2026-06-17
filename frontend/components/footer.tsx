@@ -138,14 +138,10 @@ export async function Footer() {
         </div>
 
         {/* Copyright */}
-        <div className="mt-20 border-t border-border/50 pt-8 flex flex-col md:flex-row items-center justify-between gap-4">
+        <div className="mt-20 border-t border-border/50 pt-8 text-center">
           <p className="text-sm text-foreground/60 font-medium">
             © {new Date().getFullYear()} IDELEH - Ideal Leadership Hub. All rights reserved.
           </p>
-          <div className="flex items-center space-x-6">
-            <Link href="#" className="text-sm text-foreground/60 hover:text-primary transition-colors">Privacy Policy</Link>
-            <Link href="#" className="text-sm text-foreground/60 hover:text-primary transition-colors">Terms of Service</Link>
-          </div>
         </div>
       </div>
     </footer>
