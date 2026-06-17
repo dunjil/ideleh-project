@@ -7,19 +7,61 @@ import { getImageSrc } from "@/lib/image-utils"
 async function getProjects() {
   try {
     const data = await api.projects.getAll()
-    return data.map((p: any) => ({ id: p.id, title: p.title, description: p.description, imageUrl: getImageSrc(p.image_data) }))
+
+    // If no data from API, return fallback projects
+    if (!data || data.length === 0) {
+      return [
+        {
+          id: "1",
+          title: "LeaderZ Conferences",
+          description: "The LeaderZ Conference aims to redefine the way secondary school prefects are trained, mentored, and empowered. With a focus on unlocking their leadership potential, we bring together esteemed speakers, expert trainers, and industry professionals to provide valuable insights, practical knowledge, and networking opportunities.",
+          imageUrl: "/images/leaderz.jpg"
+        },
+        {
+          id: "2",
+          title: "Nation Building Conferences",
+          description: "The Nation Building Conferences are an integral component of our leadership development programs designed to inspire aspiring leaders to position themselves with the requisite knowledge, skills, and values required to address the unique challenges faced by our country and the broader African continent.",
+          imageUrl: "/images/nbc.jpg"
+        },
+        {
+          id: "3",
+          title: "Mentorship Hub",
+          description: "Our Mentorship Hub connects aspiring leaders with experienced mentors who provide guidance, support, and valuable insights to help them navigate their leadership journey. Through structured mentorship programs, we create opportunities for knowledge transfer, skill development, and personal growth.",
+          imageUrl: "/images/mentorship.jpg"
+        }
+      ]
+    }
+
+    return data.map((p: any) => ({
+      id: p.id,
+      title: p.title,
+      description: p.description,
+      imageUrl: getImageSrc(p.image_data)
+    }))
   } catch (e) {
     console.error("Error in getProjects:", e)
-    return []
+    // Return fallback on error
+    return [
+      {
+        id: "1",
+        title: "LeaderZ Conferences",
+        description: "Annual conference for secondary school prefects leadership training and empowerment.",
+        imageUrl: "/images/leaderz.jpg"
+      },
+      {
+        id: "2",
+        title: "Nation Building Conferences",
+        description: "Inspiring young leaders to address national challenges and build a better future.",
+        imageUrl: "/images/nbc.jpg"
+      }
+    ]
   }
 }
 
 export default async function ProjectsPage() {
   const projects = await getProjects()
 
-  // If we have projects from the database, display them
-  if (projects.length > 0) {
-    return (
+  return (
       <div className="container mx-auto px-4 py-16 md:py-24">
         <div className="mx-auto max-w-3xl text-center">
           <h1 className="text-4xl font-bold tracking-tight sm:text-5xl">
@@ -66,133 +108,4 @@ export default async function ProjectsPage() {
         </div>
       </div>
     )
-  }
-
-  // Fallback to static content if no projects in database
-  return (
-    <div className="container mx-auto px-4 py-16 md:py-24">
-      <div className="mx-auto max-w-3xl text-center">
-        <h1 className="text-4xl font-bold tracking-tight sm:text-5xl">
-          Our <span className="text-primary">Projects</span>
-        </h1>
-        <p className="mt-4 text-lg text-gray-600 dark:text-gray-400">
-          Discover our impactful initiatives designed to develop and empower the next generation of leaders.
-        </p>
-      </div>
-
-      <div className="mt-16 space-y-24">
-        {/* LeaderZ Conferences */}
-        <div className="grid gap-12 md:grid-cols-2 md:items-center">
-          <div className="order-2 md:order-1">
-            <h2 className="text-3xl font-bold">LeaderZ Conferences</h2>
-            <div className="mt-6 space-y-4 text-lg text-gray-600 dark:text-gray-400">
-              <p>
-                The LeaderZ Conference aims to redefine the way secondary school prefects are trained, mentored, and
-                empowered. With a focus on unlocking their leadership potential, we bring together esteemed speakers,
-                expert trainers, and industry professionals to provide valuable insights, practical knowledge, and
-                networking opportunities.
-              </p>
-              <p>
-                Through our annual conferences, we strive to equip young prefects with the necessary skills, confidence,
-                and inspiration to become influential leaders within their school communities and beyond.
-              </p>
-              <p>
-                There is no better way to raise the leaders of tomorrow than to focus on equipping the leaders of today.
-                The prefect-ship institution is an indispensable platform for early intentional leadership equipping. We
-                seek to consolidate and advance the efforts in leadership development for secondary school prefects.
-              </p>
-              <p>
-                By organizing annual conferences, we aim to create a transformative learning experience for the
-                prefects, empowering them with essential leadership qualities, fostering a deeper sense of
-                responsibility for their present roles and for future leadership roles.
-              </p>
-            </div>
-            <div className="mt-6">
-              <Button asChild>
-                <Link href="/events">View Upcoming Conferences</Link>
-              </Button>
-            </div>
-          </div>
-          <div className="relative h-[400px] overflow-hidden rounded-lg shadow-xl order-1 md:order-2">
-            <Image
-              src={"/images/leaderz.jpg"}
-              alt="LeaderZ Conferences"
-              fill
-              className="object-cover"
-            />
-          </div>
-        </div>
-
-        {/* Nation Building Conferences */}
-        <div className="grid gap-12 md:grid-cols-2 md:items-center">
-          <div className="relative h-[400px] overflow-hidden rounded-lg shadow-xl">
-            <Image
-              src={"/images/nbc.jpg"}
-              alt="Nation Building Conferences"
-              fill
-              className="object-cover"
-            />
-          </div>
-          <div>
-            <h2 className="text-3xl font-bold">Nation Building Conferences</h2>
-            <div className="mt-6 space-y-4 text-lg text-gray-600 dark:text-gray-400">
-              <p>
-                The Nation Building Conferences are an integral component of our leadership development programs
-                designed to inspire aspiring leaders to position themselves with the requisite knowledge, skills, and
-                values required to address the unique challenges faced by our country and the broader African continent.
-              </p>
-              <p>
-                We aim to cultivate a cadre of leaders who not only understand the intricacies of their communities but
-                also exhibit unwavering commitment to leadership and patriotism as integral facets of their lives.
-              </p>
-              <p>
-                In all our leadership engagements and expressions, The Ideal Leadership Hub stands as an emblem
-                steadfastly proclaiming a profound faith in Nigeria and the African Continent. It serves as a beacon of
-                hope extended to young Nigerians aspiring for a better nation and seeking to become catalysts for
-                national transformation.
-              </p>
-              <p>
-                Our commitment lies in recognizing these young individuals, natural leaders who have assumed a posture
-                of responsibility in the nation-building endeavor. We assert with unwavering certainty that such youths
-                are abundant. Our role extends beyond mere identification; we actively empower and strategically deploy
-                them to areas where their contributions can be most impactful.
-              </p>
-            </div>
-            <div className="mt-6">
-              <Button asChild>
-                <Link href="/events">View Upcoming Conferences</Link>
-              </Button>
-            </div>
-          </div>
-        </div>
-
-        {/* Mentorship Hub */}
-        <div className="grid gap-12 md:grid-cols-2 md:items-center">
-          <div className="order-2 md:order-1">
-            <h2 className="text-3xl font-bold">Mentorship Hub</h2>
-            <div className="mt-6 space-y-4 text-lg text-gray-600 dark:text-gray-400">
-              <p>
-                Our Mentorship Hub connects aspiring leaders with experienced mentors who provide guidance, support, and
-                valuable insights to help them navigate their leadership journey.
-              </p>
-              <p>
-                Through structured mentorship programs, we create opportunities for knowledge transfer, skill
-                development, and personal growth, empowering the next generation of leaders to reach their full
-                potential.
-              </p>
-            </div>
-
-          </div>
-          <div className="relative h-[400px] overflow-hidden rounded-lg shadow-xl order-1 md:order-2">
-            <Image
-              src={"/images/mentorship.jpg"}
-              alt="Mentorship Hub"
-              fill
-              className="object-cover"
-            />
-          </div>
-        </div>
-      </div>
-    </div>
-  )
 }

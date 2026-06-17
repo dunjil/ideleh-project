@@ -54,11 +54,35 @@ export default async function Home() {
     ctaText: "Join Us",
     ctaLink: "/events"
   })) : [
-    { id: "1", title: "IDEAL LEADERSHIP HUB", description: "Empowering the next generation of leaders through strategic trainings and mentorship.", imageUrl: "/placeholder.svg?height=1080&width=1920", ctaText: "Join Us", ctaLink: "/events" }
+    {
+      id: "1",
+      title: "IDEAL LEADERSHIP HUB",
+      description: "Empowering the next generation of leaders through strategic trainings and mentorship.",
+      imageUrl: "/images/leaderz.jpg",
+      ctaText: "Join Us",
+      ctaLink: "/events"
+    },
+    {
+      id: "2",
+      title: "Building Future Leaders",
+      description: "Transforming young minds into credible, competent, and principled leaders for tomorrow.",
+      imageUrl: "/images/nbc.jpg",
+      ctaText: "Learn More",
+      ctaLink: "/about"
+    },
+    {
+      id: "3",
+      title: "Mentorship That Matters",
+      description: "Connecting aspiring leaders with experienced mentors for guidance and growth.",
+      imageUrl: "/images/mentorship.jpg",
+      ctaText: "Get Started",
+      ctaLink: "/services"
+    }
   ]
 
+  // Use gallery images if available, otherwise fallback to local images
   let purposeImageSrc = "/images/purpose.jpg"
-  if (galleryImages[0] && galleryImages[0].image_data) {
+  if (galleryImages.length > 0 && galleryImages[0].image_data) {
     const src = getImageSrc(galleryImages[0].image_data)
     if (src !== "/placeholder.svg" && !src.toLowerCase().endsWith('.heic')) {
       purposeImageSrc = src
@@ -71,47 +95,47 @@ export default async function Home() {
       <HeroSlideshow images={displayHeroImages} />
 
       {/* Vision & Mission Section */}
-      <section className="py-32 relative overflow-hidden bg-background">
+      <section className="py-16 sm:py-24 md:py-32 relative overflow-hidden bg-background">
         <div className="absolute top-0 right-0 w-2/3 h-full bg-primary/5 -skew-x-12 transform translate-x-1/2 blur-2xl opacity-50 dark:opacity-20 pointer-events-none" />
         <div className="absolute top-10 left-10 w-[500px] h-[500px] rounded-full bg-secondary/10 blur-[120px] pointer-events-none opacity-50" />
 
-        <div className="container mx-auto px-4 relative z-10">
-          <div className="grid gap-16 md:grid-cols-2 items-center">
+        <div className="container mx-auto px-4 sm:px-6 relative z-10">
+          <div className="grid gap-12 md:gap-16 md:grid-cols-2 items-center">
             <div>
               <ScrollReveal>
-                <span className="text-secondary font-bold tracking-widest uppercase text-sm mb-4 block">Our Purpose</span>
-                <h2 className="text-4xl md:text-6xl font-display mb-8 text-foreground leading-tight">
+                <span className="text-secondary font-bold tracking-widest uppercase text-xs sm:text-sm mb-4 block">Our Purpose</span>
+                <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-display mb-6 sm:mb-8 text-foreground leading-tight">
                   Raising <span className="text-primary italic">Credible Leaders</span> for Global Impact
                 </h2>
               </ScrollReveal>
 
-              <div className="space-y-6">
+              <div className="space-y-4 sm:space-y-6">
                 <ScrollReveal delay={0.2}>
-                  <div className="glass-card p-8 rounded-2xl hover:scale-[1.02] transition-transform duration-500 relative overflow-hidden group">
+                  <div className="glass-card p-6 sm:p-8 rounded-2xl hover:scale-[1.02] transition-transform duration-500 relative overflow-hidden group">
                     <div className="absolute inset-0 bg-primary/5 translate-y-full group-hover:translate-y-0 transition-transform duration-500" />
-                    <h3 className="text-2xl font-display font-bold mb-4 flex items-center gap-3 relative z-10 text-foreground">
-                      <div className="w-1.5 h-6 bg-secondary rounded-full" />
+                    <h3 className="text-xl sm:text-2xl font-display font-bold mb-3 sm:mb-4 flex items-center gap-3 relative z-10 text-foreground">
+                      <div className="w-1.5 h-5 sm:h-6 bg-secondary rounded-full" />
                       {siteContent.vision.title}
                     </h3>
-                    <p className="text-lg text-foreground/80 leading-relaxed relative z-10">{siteContent.vision.content}</p>
+                    <p className="text-base sm:text-lg text-foreground/80 leading-relaxed relative z-10">{siteContent.vision.content}</p>
                   </div>
                 </ScrollReveal>
 
                 <ScrollReveal delay={0.3}>
-                  <div className="glass-card p-8 rounded-2xl hover:scale-[1.02] transition-transform duration-500 relative overflow-hidden group">
+                  <div className="glass-card p-6 sm:p-8 rounded-2xl hover:scale-[1.02] transition-transform duration-500 relative overflow-hidden group">
                     <div className="absolute inset-0 bg-secondary/5 translate-y-full group-hover:translate-y-0 transition-transform duration-500" />
-                    <h3 className="text-2xl font-display font-bold mb-4 flex items-center gap-3 relative z-10 text-foreground">
-                      <div className="w-1.5 h-6 bg-primary rounded-full" />
+                    <h3 className="text-xl sm:text-2xl font-display font-bold mb-3 sm:mb-4 flex items-center gap-3 relative z-10 text-foreground">
+                      <div className="w-1.5 h-5 sm:h-6 bg-primary rounded-full" />
                       {siteContent.mission.title}
                     </h3>
-                    <p className="text-lg text-foreground/80 leading-relaxed relative z-10">{siteContent.mission.content}</p>
+                    <p className="text-base sm:text-lg text-foreground/80 leading-relaxed relative z-10">{siteContent.mission.content}</p>
                   </div>
                 </ScrollReveal>
               </div>
 
               <ScrollReveal delay={0.4}>
-                <div className="mt-12 flex gap-4">
-                  <Button asChild size="lg" className="rounded-full px-8 bg-primary hover:bg-primary/90 text-primary-foreground font-medium shadow-lg hover:shadow-primary/30 transition-all">
+                <div className="mt-8 sm:mt-12 flex gap-4">
+                  <Button asChild size="lg" className="rounded-full px-6 sm:px-8 bg-primary hover:bg-primary/90 text-primary-foreground font-medium shadow-lg hover:shadow-primary/30 transition-all">
                     <Link href="/about">Learn More <ArrowRight className="ml-2 h-4 w-4" /></Link>
                   </Button>
                 </div>
@@ -121,12 +145,12 @@ export default async function Home() {
             <FadeIn delay={0.3}>
               <div className="relative animate-float">
                 <div className="absolute inset-0 bg-primary/10 dark:bg-primary/5 rounded-[2rem] rotate-3 scale-105" />
-                <div className="relative h-[650px] overflow-hidden rounded-[2rem] shadow-2xl border border-white/20 dark:border-white/10 bg-card">
+                <div className="relative h-[400px] sm:h-[500px] md:h-[650px] overflow-hidden rounded-[2rem] shadow-2xl border border-white/20 dark:border-white/10 bg-card">
                   <img src={purposeImageSrc} alt="IDELEH Impact" className="object-cover w-full h-full" />
                 </div>
-                <div className="absolute -bottom-8 -left-8 glass-card border border-white/20 dark:border-white/10 p-6 rounded-2xl shadow-xl max-w-[220px] animate-bounce" style={{ animationDuration: '4s' }}>
-                  <p className="text-4xl font-display font-bold text-primary mb-1">1000+</p>
-                  <p className="text-sm font-medium text-foreground/70 uppercase tracking-wider">Leaders Trained</p>
+                <div className="absolute -bottom-4 sm:-bottom-8 -left-4 sm:-left-8 glass-card border border-white/20 dark:border-white/10 p-4 sm:p-6 rounded-2xl shadow-xl max-w-[180px] sm:max-w-[220px] animate-bounce" style={{ animationDuration: '4s' }}>
+                  <p className="text-3xl sm:text-4xl font-display font-bold text-primary mb-1">1000+</p>
+                  <p className="text-xs sm:text-sm font-medium text-foreground/70 uppercase tracking-wider">Leaders Trained</p>
                 </div>
               </div>
             </FadeIn>
@@ -135,17 +159,17 @@ export default async function Home() {
       </section>
 
       {/* Services Section */}
-      <section className="bg-secondary/5 py-32 relative overflow-hidden">
-        <div className="container mx-auto px-4 relative z-10">
+      <section className="bg-secondary/5 py-16 sm:py-24 md:py-32 relative overflow-hidden">
+        <div className="container mx-auto px-4 sm:px-6 relative z-10">
           <ScrollReveal>
-            <div className="mb-24 text-center max-w-3xl mx-auto">
-              <h2 className="text-4xl md:text-6xl font-display mb-6 text-foreground">Our <span className="text-secondary italic bg-clip-text text-transparent bg-gradient-to-r from-secondary to-primary">Core Services</span></h2>
-              <div className="h-1.5 w-24 bg-gradient-to-r from-primary to-secondary mx-auto mb-8 rounded-full" />
-              <p className="text-xl text-foreground/70">We provide a comprehensive framework for leadership development that spans across different sectors and age groups.</p>
+            <div className="mb-16 sm:mb-20 md:mb-24 text-center max-w-3xl mx-auto">
+              <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-display mb-4 sm:mb-6 text-foreground">Our <span className="text-secondary italic bg-clip-text text-transparent bg-gradient-to-r from-secondary to-primary">Core Services</span></h2>
+              <div className="h-1.5 w-20 sm:w-24 bg-gradient-to-r from-primary to-secondary mx-auto mb-6 sm:mb-8 rounded-full" />
+              <p className="text-base sm:text-lg md:text-xl text-foreground/70 px-4 sm:px-0">We provide a comprehensive framework for leadership development that spans across different sectors and age groups.</p>
             </div>
           </ScrollReveal>
 
-          <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
+          <div className="grid gap-6 sm:gap-8 sm:grid-cols-2 lg:grid-cols-3">
             {[
               { icon: Lightbulb, title: "Trainings", desc: "Interactive workshops and real-world case studies to enhance leadership capabilities." },
               { icon: Users, title: "Mentorship", desc: "Pairing young leaders with experienced mentors for guidance and industry insights." },
@@ -169,22 +193,22 @@ export default async function Home() {
       </section>
 
       {/* Projects Section */}
-      <section className="py-32 relative">
+      <section className="py-16 sm:py-24 md:py-32 relative">
         <div className="absolute top-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-primary/20 to-transparent" />
-        <div className="container mx-auto px-4">
+        <div className="container mx-auto px-4 sm:px-6">
           <ScrollReveal>
-            <div className="flex flex-col md:flex-row justify-between items-end mb-20 gap-8">
+            <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-12 sm:mb-16 md:mb-20 gap-6 sm:gap-8">
               <div className="max-w-2xl">
-                <h2 className="text-4xl md:text-6xl font-display mb-6 text-foreground">Signature <span className="text-primary italic">Projects</span></h2>
-                <p className="text-xl text-foreground/70">Transformative initiatives that define our commitment to national development.</p>
+                <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-display mb-4 sm:mb-6 text-foreground">Signature <span className="text-primary italic">Projects</span></h2>
+                <p className="text-base sm:text-lg md:text-xl text-foreground/70">Transformative initiatives that define our commitment to national development.</p>
               </div>
-              <Button asChild variant="outline" size="lg" className="rounded-full border-primary/20 hover:bg-primary/5">
+              <Button asChild variant="outline" size="lg" className="rounded-full border-primary/20 hover:bg-primary/5 w-full sm:w-auto">
                 <Link href="/projects">View All Projects</Link>
               </Button>
             </div>
           </ScrollReveal>
 
-          <div className="grid gap-12 sm:grid-cols-2 lg:grid-cols-3">
+          <div className="grid gap-8 sm:gap-10 md:gap-12 sm:grid-cols-2 lg:grid-cols-3">
             {featuredProjects.length > 0 ? featuredProjects.map((project: any, i: number) => (
               <ScrollReveal delay={i * 0.15} key={project.id}>
                 <div className="group flex flex-col h-full bg-card overflow-hidden rounded-3xl shadow-lg border border-border hover:shadow-xl transition-all duration-500 hover:-translate-y-2">
@@ -209,7 +233,7 @@ export default async function Home() {
                   <div className="flex flex-col flex-grow p-10 relative">
                     <h3 className="text-2xl font-display font-bold text-foreground mb-4">{project.title}</h3>
                     <p className="text-foreground/70 line-clamp-3 mb-8 flex-grow leading-relaxed">{project.description}</p>
-                    <Link href="/projects" className="text-primary font-bold flex items-center gap-2 hover:gap-3 transition-all mt-auto uppercase tracking-wider text-sm">Read Case Study <ArrowRight className="h-4 w-4" /></Link>
+                    <Link href="/projects" className="text-primary font-bold flex items-center gap-2 hover:gap-3 transition-all mt-auto uppercase tracking-wider text-sm">Learn More <ArrowRight className="h-4 w-4" /></Link>
                   </div>
                 </div>
               </ScrollReveal>
@@ -227,7 +251,7 @@ export default async function Home() {
                   <div className="flex flex-col flex-grow p-10 relative">
                     <h3 className="text-2xl font-display font-bold text-foreground mb-4">{p.title}</h3>
                     <p className="text-foreground/70 line-clamp-3 mb-8 flex-grow leading-relaxed">{p.desc}</p>
-                    <Link href="/projects" className="text-primary font-bold flex items-center gap-2 hover:gap-3 transition-all mt-auto uppercase tracking-wider text-sm">Read Case Study <ArrowRight className="h-4 w-4" /></Link>
+                    <Link href="/projects" className="text-primary font-bold flex items-center gap-2 hover:gap-3 transition-all mt-auto uppercase tracking-wider text-sm">Learn More <ArrowRight className="h-4 w-4" /></Link>
                   </div>
                 </div>
               </ScrollReveal>
@@ -237,40 +261,60 @@ export default async function Home() {
       </section>
 
       {/* Team Section */}
-      <section className="bg-primary/5 py-32 relative">
+      <section className="bg-primary/5 py-16 sm:py-24 md:py-32 relative">
         <div className="absolute bottom-0 right-0 w-[600px] h-[600px] rounded-full bg-secondary/10 blur-[150px] pointer-events-none opacity-40" />
-        <div className="container mx-auto px-4 text-center relative z-10">
+        <div className="container mx-auto px-4 sm:px-6 text-center relative z-10">
           <ScrollReveal>
-            <div className="mb-24">
-              <h2 className="text-4xl md:text-6xl font-display mb-6 text-foreground">Our <span className="text-secondary italic">Leadership</span></h2>
-              <p className="text-xl text-foreground/70 max-w-2xl mx-auto">Guided by a team of visionary leaders dedicated to the Hub's mission.</p>
+            <div className="mb-16 sm:mb-20 md:mb-24">
+              <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-display mb-4 sm:mb-6 text-foreground">Our <span className="text-secondary italic">Leadership</span></h2>
+              <p className="text-base sm:text-lg md:text-xl text-foreground/70 max-w-2xl mx-auto px-4 sm:px-0">Guided by a team of visionary leaders dedicated to the Hub's mission.</p>
             </div>
           </ScrollReveal>
 
-          <div className="grid gap-16 sm:grid-cols-2 lg:grid-cols-3">
+          <div className="grid gap-12 sm:gap-16 sm:grid-cols-2 lg:grid-cols-3">
             {teamMembers.length > 0 ? teamMembers.map((member: any, i: number) => (
               <ScrollReveal delay={i * 0.15} key={member.id}>
                 <div className="group flex flex-col items-center">
-                  <div className="relative h-80 w-80 mb-8 overflow-hidden rounded-full border-4 border-background shadow-2xl transition-transform duration-700 group-hover:scale-[1.03]">
+                  <div className="relative h-56 w-56 sm:h-64 sm:w-64 md:h-72 md:w-72 lg:h-80 lg:w-80 mb-6 sm:mb-8 overflow-hidden rounded-full border-4 border-background shadow-2xl transition-transform duration-700 group-hover:scale-[1.03]">
                     <Image src={getImageSrc(member.image_data) || "/placeholder.svg"} alt={member.name} fill className="object-cover" />
                   </div>
-                  <h3 className="text-3xl font-display font-bold mb-2">{member.name}</h3>
-                  <p className="text-secondary font-bold uppercase tracking-widest text-sm mb-4">{member.position}</p>
-                  <div className="max-w-sm">
-                    <p className="text-foreground/60 leading-relaxed line-clamp-2">{member.bio}</p>
+                  <h3 className="text-2xl sm:text-3xl font-display font-bold mb-2 text-center">{member.name}</h3>
+                  <p className="text-secondary font-bold uppercase tracking-widest text-xs sm:text-sm mb-4">{member.position}</p>
+                  <div className="max-w-sm px-4">
+                    <p className="text-foreground/60 leading-relaxed line-clamp-2 text-center">{member.bio}</p>
                   </div>
                 </div>
               </ScrollReveal>
             )) : [
-              { name: "Abel Ajayi", role: "Co-Founder" },
-              { name: "Priscilla Asher John", role: "Executive Director" },
-              { name: "Waltong David Tyoden", role: "Co-Founder" }
+              {
+                name: "Abel Ajayi",
+                role: "Co-Founder",
+                image: "/images/team/abel.jpg",
+                bio: "Passionate about developing young leaders with integrity and vision for national transformation."
+              },
+              {
+                name: "Priscilla Asher John",
+                role: "Executive Director",
+                image: "/images/team/priscilla.jpg",
+                bio: "Dedicated to empowering the next generation through strategic leadership development programs."
+              },
+              {
+                name: "Waltong David Tyoden",
+                role: "Co-Founder",
+                image: "/images/team/waltong.jpeg",
+                bio: "Committed to raising credible leaders who will drive positive change in society."
+              }
             ].map((m, i) => (
               <ScrollReveal delay={i * 0.15} key={i}>
-                <div className="flex flex-col items-center opacity-70">
-                  <div className="h-80 w-80 bg-muted rounded-full mb-8 shadow-inner" />
-                  <h3 className="text-2xl font-display font-bold mb-2">{m.name}</h3>
-                  <p className="text-primary text-sm font-bold uppercase tracking-widest">{m.role}</p>
+                <div className="group flex flex-col items-center">
+                  <div className="relative h-56 w-56 sm:h-64 sm:w-64 md:h-72 md:w-72 lg:h-80 lg:w-80 mb-6 sm:mb-8 overflow-hidden rounded-full border-4 border-background shadow-2xl transition-transform duration-700 group-hover:scale-[1.03]">
+                    <Image src={m.image} alt={m.name} fill className="object-cover" />
+                  </div>
+                  <h3 className="text-2xl sm:text-3xl font-display font-bold mb-2 text-center">{m.name}</h3>
+                  <p className="text-secondary font-bold uppercase tracking-widest text-xs sm:text-sm mb-4">{m.role}</p>
+                  <div className="max-w-sm px-4">
+                    <p className="text-foreground/60 leading-relaxed line-clamp-2 text-center">{m.bio}</p>
+                  </div>
                 </div>
               </ScrollReveal>
             ))}

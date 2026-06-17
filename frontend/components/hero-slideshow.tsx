@@ -77,39 +77,39 @@ export function HeroSlideshow({
 
   return (
     <div
-      className={cn("relative min-h-[85vh] flex flex-col lg:flex-row items-center bg-background/50 overflow-hidden", className)}
+      className={cn("relative min-h-[70vh] sm:min-h-[80vh] lg:min-h-[85vh] flex flex-col lg:flex-row items-center bg-background/50 overflow-hidden", className)}
       onMouseEnter={() => setIsHovering(true)}
       onMouseLeave={() => setIsHovering(false)}
     >
       {/* Left pane: Content */}
-      <div className="w-full lg:w-1/2 relative flex items-center shrink-0 z-10 min-h-[50vh] lg:min-h-[85vh]">
+      <div className="w-full lg:w-1/2 relative flex items-center shrink-0 z-10 min-h-[45vh] sm:min-h-[50vh] lg:min-h-[85vh] order-2 lg:order-1">
         {images.map((image, index) => (
           <div
             key={`content-${image.id}`}
             className={cn(
-              "absolute inset-0 flex flex-col justify-center px-8 sm:px-12 lg:px-20 xl:px-24 transition-all duration-1000",
+              "absolute inset-0 flex flex-col justify-center px-6 sm:px-8 md:px-12 lg:px-16 xl:px-24 transition-all duration-1000",
               index === currentIndex
                 ? "opacity-100 translate-y-0"
                 : "opacity-0 translate-y-8 pointer-events-none"
             )}
           >
-            <div className="max-w-xl space-y-8 pt-12 lg:pt-0">
-              <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-display font-bold leading-[1.1] tracking-tight text-foreground">
+            <div className="max-w-xl space-y-4 sm:space-y-6 lg:space-y-8 pb-16 sm:pb-20 lg:pb-0">
+              <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-display font-bold leading-[1.1] tracking-tight text-foreground">
                 {image.title}
               </h1>
               {image.description && (
-                <p className="text-lg md:text-xl text-muted-foreground font-medium leading-relaxed">
+                <p className="text-base sm:text-lg md:text-xl text-muted-foreground font-medium leading-relaxed">
                   {image.description}
                 </p>
               )}
 
               {(image.ctaText || image.secondaryCtaText) && (
-                <div className="pt-6 flex flex-col sm:flex-row items-start gap-4">
+                <div className="pt-2 sm:pt-4 lg:pt-6 flex flex-col sm:flex-row items-start gap-3 sm:gap-4">
                   {image.ctaText && (
                     <Button
                       asChild
                       size="lg"
-                      className="px-8 py-6 text-lg bg-primary text-primary-foreground hover:bg-primary/90 transition-all rounded-md shadow-sm xl:shadow-md"
+                      className="px-6 sm:px-8 py-5 sm:py-6 text-base sm:text-lg bg-primary text-primary-foreground hover:bg-primary/90 transition-all rounded-md shadow-sm xl:shadow-md w-full sm:w-auto"
                     >
                       <Link href={image.ctaLink || "#"}>
                         {image.ctaText}
@@ -121,7 +121,7 @@ export function HeroSlideshow({
                       asChild
                       variant="outline"
                       size="lg"
-                      className="px-8 py-6 text-lg transition-all border-border text-foreground hover:bg-accent hover:text-accent-foreground rounded-md"
+                      className="px-6 sm:px-8 py-5 sm:py-6 text-base sm:text-lg transition-all border-border text-foreground hover:bg-accent hover:text-accent-foreground rounded-md w-full sm:w-auto"
                     >
                       <Link href={image.secondaryCtaLink || "#"}>
                         {image.secondaryCtaText}
@@ -136,32 +136,32 @@ export function HeroSlideshow({
 
         {/* Navigation Controls */}
         {showControls && images.length > 1 && (
-          <div className="absolute bottom-8 left-8 sm:left-12 lg:left-20 xl:left-24 flex gap-4 z-20">
+          <div className="absolute bottom-4 sm:bottom-8 left-6 sm:left-8 md:left-12 lg:left-16 xl:left-24 flex gap-2 sm:gap-4 z-20">
             <Button
               variant="outline"
               size="icon"
-              className="h-12 w-12 rounded-md border-border bg-background text-foreground hover:bg-accent hover:text-accent-foreground transition-all shadow-sm"
+              className="h-10 w-10 sm:h-12 sm:w-12 rounded-md border-border bg-background text-foreground hover:bg-accent hover:text-accent-foreground transition-all shadow-sm"
               onClick={goToPrevious}
               aria-label="Previous slide"
             >
-              <ChevronLeft className="h-5 w-5" />
+              <ChevronLeft className="h-4 w-4 sm:h-5 sm:w-5" />
             </Button>
             <Button
               variant="outline"
               size="icon"
-              className="h-12 w-12 rounded-md border-border bg-background text-foreground hover:bg-accent hover:text-accent-foreground transition-all shadow-sm"
+              className="h-10 w-10 sm:h-12 sm:w-12 rounded-md border-border bg-background text-foreground hover:bg-accent hover:text-accent-foreground transition-all shadow-sm"
               onClick={goToNext}
               aria-label="Next slide"
             >
-              <ChevronRight className="h-5 w-5" />
+              <ChevronRight className="h-4 w-4 sm:h-5 sm:w-5" />
             </Button>
           </div>
         )}
       </div>
 
       {/* Right pane: Framed Image Slideshow */}
-      <div className="w-full lg:w-1/2 relative min-h-[40vh] lg:min-h-[85vh] flex items-center justify-center p-6 lg:p-12 xl:p-16">
-        <div className="relative w-full aspect-[4/5] lg:aspect-square overflow-hidden rounded-[2rem] lg:rounded-[4rem] shadow-2xl border-4 border-white bg-gray-100">
+      <div className="w-full lg:w-1/2 relative min-h-[35vh] sm:min-h-[40vh] lg:min-h-[85vh] flex items-center justify-center p-4 sm:p-6 lg:p-12 xl:p-16 order-1 lg:order-2">
+        <div className="relative w-full max-w-md lg:max-w-none aspect-[4/5] lg:aspect-square overflow-hidden rounded-2xl sm:rounded-[2rem] lg:rounded-[4rem] shadow-2xl border-2 sm:border-4 border-white bg-gray-100">
           {images.map((image, index) => (
             <div
               key={`image-${image.id}`}
@@ -186,13 +186,13 @@ export function HeroSlideshow({
       </div>
 
       {showIndicators && images.length > 1 && (
-        <div className="absolute bottom-6 left-1/2 -translate-x-1/2 lg:left-auto lg:right-16 lg:bottom-10 z-20 flex gap-3">
+        <div className="absolute bottom-3 sm:bottom-6 left-1/2 -translate-x-1/2 lg:left-auto lg:right-12 xl:right-16 lg:bottom-8 xl:bottom-10 z-20 flex gap-2 sm:gap-3">
           {images.map((_, index) => (
             <button
               key={index}
               className={cn(
-                "h-2 transition-all duration-300 rounded-full",
-                index === currentIndex ? "bg-primary w-8" : "bg-gray-300 w-2 hover:bg-gray-400"
+                "h-1.5 sm:h-2 transition-all duration-300 rounded-full",
+                index === currentIndex ? "bg-primary w-6 sm:w-8" : "bg-gray-300 w-1.5 sm:w-2 hover:bg-gray-400"
               )}
               onClick={() => goToSlide(index)}
               aria-label={`Go to slide ${index + 1}`}

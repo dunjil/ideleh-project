@@ -23,7 +23,9 @@ function mapStrapiImages(data: any): any {
 }
 
 async function fetcher(endpoint: string, single = false) {
-    const response = await fetch(`${API_URL}${endpoint}`)
+    const response = await fetch(`${API_URL}${endpoint}`, {
+        next: { revalidate: 60 } // Cache for 60 seconds
+    })
     if (!response.ok) {
         throw new Error(`API error: ${response.statusText}`)
     }
@@ -68,5 +70,14 @@ export const api = {
     },
     hero: {
         getAll: () => fetcher("/hero-images?populate=*"),
+    },
+    contactInfo: {
+        get: () => fetcher("/contact-info"),
+    },
+    services: {
+        getAll: () => fetcher("/services?populate=*"),
+    },
+    supportInfo: {
+        get: () => fetcher("/support-info"),
     },
 }
