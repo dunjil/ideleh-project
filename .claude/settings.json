@@ -1,0 +1,8 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(grep -E \"\\\\.\\(ts|tsx\\)$\")",
+      "Bash(git -C /Users/mac/Documents/apps/ideleh-project stash pop)"
+    ]
+  }
+}
