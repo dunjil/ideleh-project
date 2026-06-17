@@ -23,22 +23,28 @@ function mapStrapiImages(data: any): any {
 }
 
 async function fetcher(endpoint: string, single = false) {
-    const response = await fetch(`${API_URL}${endpoint}`, {
-        next: { revalidate: 60 } // Cache for 60 seconds
-    })
-    if (!response.ok) {
-        throw new Error(`API error: ${response.statusText}`)
-    }
-    const json = await response.json()
-    // Strapi wraps responses in "data" property
-    if (json.data !== undefined) {
-        let items = mapStrapiImages(json.data);
-        if (single && Array.isArray(items)) {
-            return items[0] || null
+    try {
+        const response = await fetch(`${API_URL}${endpoint}`, {
+            next: { revalidate: 60 } // Cache for 60 seconds
+        })
+        if (!response.ok) {
+            console.warn(`API error: ${response.statusText} for ${endpoint}`)
+            return single ? null : []
         }
-        return items
+        const json = await response.json()
+        // Strapi wraps responses in "data" property
+        if (json.data !== undefined) {
+            let items = mapStrapiImages(json.data);
+            if (single && Array.isArray(items)) {
+                return items[0] || null
+            }
+            return items
+        }
+        return mapStrapiImages(json)
+    } catch (error) {
+        console.warn(`Failed to fetch ${endpoint}:`, error)
+        return single ? null : []
     }
-    return mapStrapiImages(json)
 }
 
 export const api = {
