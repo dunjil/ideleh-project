@@ -1,11 +1,11 @@
 {
   "kind": "collectionType",
-  "collectionName": "galleries",
+  "collectionName": "services",
   "info": {
-    "singularName": "gallery",
-    "pluralName": "galleries",
-    "displayName": "Gallery",
-    "description": ""
+    "singularName": "service",
+    "pluralName": "services",
+    "displayName": "Service",
+    "description": "Services offered by the organization"
   },
   "options": {
     "draftAndPublish": false
@@ -17,18 +17,12 @@
       "required": true
     },
     "description": {
-      "type": "text"
-    },
-    "category": {
-      "type": "string",
+      "type": "text",
       "required": true
     },
-    "images": {
-      "type": "media",
-      "multiple": true,
-      "allowedTypes": [
-        "images"
-      ]
+    "icon": {
+      "type": "string",
+      "default": "Lightbulb"
     },
     "display_order": {
       "type": "integer",

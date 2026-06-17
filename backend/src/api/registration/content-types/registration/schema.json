@@ -31,7 +31,25 @@
       "required": true
     },
     "phone": {
-      "type": "string"
+      "type": "string",
+      "required": true
+    },
+    "payment_status": {
+      "type": "enumeration",
+      "enum": [
+        "pending",
+        "confirmed",
+        "failed"
+      ],
+      "default": "pending"
+    },
+    "payment_receipt": {
+      "type": "media",
+      "multiple": false,
+      "allowedTypes": [
+        "images",
+        "files"
+      ]
     },
     "event": {
       "type": "relation",

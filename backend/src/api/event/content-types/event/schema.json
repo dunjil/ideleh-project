@@ -27,7 +27,29 @@
       ]
     },
     "event_date": {
-      "type": "datetime"
+      "type": "datetime",
+      "required": true
+    },
+    "location": {
+      "type": "string"
+    },
+    "is_free": {
+      "type": "boolean",
+      "default": true
+    },
+    "price": {
+      "type": "decimal"
+    },
+    "currency": {
+      "type": "string",
+      "default": "NGN"
+    },
+    "max_attendees": {
+      "type": "integer"
+    },
+    "payment_details": {
+      "type": "richtext",
+      "description": "Payment instructions including bank account details, payment methods, etc."
     },
     "registrations": {
       "type": "relation",
