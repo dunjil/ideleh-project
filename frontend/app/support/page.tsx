@@ -1,5 +1,6 @@
-import { Building2, CreditCard, User, Phone, Mail, Copy, Heart } from "lucide-react"
+import { Building2, CreditCard, User, Phone, Mail, Heart } from "lucide-react"
 import { api } from "@/lib/api"
+import { CopyButton } from "@/components/copy-button"
 
 interface SupportInfo {
   bank_name?: string
@@ -79,13 +80,11 @@ export default async function SupportPage() {
                   <Building2 className="h-5 w-5 text-primary" />
                   <span className="text-lg font-bold text-foreground">{support.bank_name}</span>
                 </div>
-                <button
-                  onClick={() => navigator.clipboard.writeText(support.bank_name)}
-                  className="p-2 rounded-lg hover:bg-background transition-colors text-muted-foreground hover:text-foreground"
+                <CopyButton
+                  text={support.bank_name}
                   title="Copy bank name"
-                >
-                  <Copy className="h-4 w-4" />
-                </button>
+                  className="p-2 rounded-lg hover:bg-background transition-colors text-muted-foreground hover:text-foreground"
+                />
               </div>
             </div>
 
@@ -99,13 +98,11 @@ export default async function SupportPage() {
                   <User className="h-5 w-5 text-primary" />
                   <span className="text-lg font-bold text-foreground">{support.account_name}</span>
                 </div>
-                <button
-                  onClick={() => navigator.clipboard.writeText(support.account_name)}
-                  className="p-2 rounded-lg hover:bg-background transition-colors text-muted-foreground hover:text-foreground"
+                <CopyButton
+                  text={support.account_name}
                   title="Copy account name"
-                >
-                  <Copy className="h-4 w-4" />
-                </button>
+                  className="p-2 rounded-lg hover:bg-background transition-colors text-muted-foreground hover:text-foreground"
+                />
               </div>
             </div>
 
@@ -119,13 +116,11 @@ export default async function SupportPage() {
                   <CreditCard className="h-5 w-5 text-primary" />
                   <span className="text-2xl font-bold text-primary font-mono tracking-wider">{support.account_number}</span>
                 </div>
-                <button
-                  onClick={() => navigator.clipboard.writeText(support.account_number)}
-                  className="p-2 rounded-lg hover:bg-primary/20 transition-colors text-primary"
+                <CopyButton
+                  text={support.account_number}
                   title="Copy account number"
-                >
-                  <Copy className="h-5 w-5" />
-                </button>
+                  className="p-2 rounded-lg hover:bg-primary/20 transition-colors text-primary"
+                />
               </div>
             </div>
           </div>
