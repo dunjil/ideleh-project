@@ -4,6 +4,9 @@ import { cookies } from "next/headers"
 import { redirect } from "next/navigation"
 import { AdminLayoutWrapper } from "@/components/admin-layout-wrapper"
 
+// Force dynamic rendering for all admin pages (no static generation during build)
+export const dynamic = 'force-dynamic'
+
 export const metadata: Metadata = {
   title: "Admin Dashboard - IDELEH",
   description: "Admin dashboard for IDELEH website",
